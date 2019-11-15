@@ -2,11 +2,27 @@
   "name": "node-fs-local",
   "version": "1.0.0",
   "description": "Typed wrapper around the fs module and providing interfaces for cloud implementations",
-  "main": "index.js",
   "repository": "git@github.com:freshfox/node-fs-local.git",
   "author": "Freshfox OG",
   "license": "MIT",
   "private": false,
+  "main": "dist/app/index.js",
+  "types": "dist/app/index.d.ts",
+  "directories": {
+    "test": "src/test",
+    "lib": "src"
+  },
+  "files": [
+    "dist/",
+    "src/",
+    "test/",
+    ".editorconfig",
+    "tsconfig.json",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=6.9.0"
+  },
   "scripts": {
     "test": "NODE_ENV=test mocha dist/test",
     "build": "tsc",

@@ -2,7 +2,9 @@ import * as admin from 'firebase-admin';
 import {inject, injectable} from 'inversify';
 import * as stream from 'stream';
 import {GetSignedUrlConfig} from "@google-cloud/storage";
-import {IOnlineFilesystem} from "node-fs-local/dist/lib/filesystem/online_filesystem";
+import {GetUrlOptions, IOnlineFilesystem} from "node-fs-local/dist/lib/filesystem/online_filesystem";
+import {Stats} from "node-fs-local/dist/lib/filesystem/filesystem";
+import {awaitWriteFinish} from "node-fs-local/dist/lib/filesystem/utils";
 
 export const FirebaseStorage = Symbol('FirebaseStorage');
 
@@ -13,8 +15,7 @@ export class FirebaseFilesystem implements IOnlineFilesystem {
 	private readonly bucketName: string;
 
 	constructor(
-		@inject(FirebaseStorage) private storage: admin.storage.Storage,
-		private config: Config
+		@inject(FirebaseStorage) private storage: admin.storage.Storage
 	) {
 		this.bucketName = config.app.bucket;
 		this.bucket = this.storage.bucket(this.bucketName);
@@ -53,7 +54,7 @@ export class FirebaseFilesystem implements IOnlineFilesystem {
 			resumable: false,
 		});
 		stream.pipe(writeStream);
-		return FileUtils.awaitWriteFinish(writeStream);
+		return awaitWriteFinish(writeStream);
 	}
 
 	async readDir(path: string): Promise<string[]> {

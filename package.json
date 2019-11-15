@@ -1,6 +1,6 @@
 {
   "name": "node-fs-local",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Typed wrapper around the fs module and providing interfaces for cloud implementations",
   "main": "index.js",
   "repository": "git@github.com:freshfox/node-fs-local.git",

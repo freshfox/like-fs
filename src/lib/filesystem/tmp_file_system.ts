@@ -1,14 +1,14 @@
 import {LocalFilesystem} from './local_file_system';
 import * as path from 'path';
 import {inject, injectable} from 'inversify';
-import * as crypto from 'crypto';
+import {randomString} from "./utils";
 
 export const TmpFilesystemConfig = Symbol('TmpFilesystemConfig');
 
 @injectable()
 export class TmpFilesystem extends LocalFilesystem {
 
-	private readonly directory = `/tmp/${crypto.randomBytes(20).toString('hex')}`;
+	private readonly directory = `/tmp/${randomString()}`;
 
 	constructor(@inject(TmpFilesystemConfig) private config: ITmpFilesystemConfig) {
 		super();

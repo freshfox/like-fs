@@ -4,8 +4,8 @@ import {injectable} from 'inversify';
 import * as mkdirp from 'mkdirp';
 import * as path from 'path';
 import {IFilesystem} from './filesystem';
-import * as stream from 'stream';
-import {Stats} from 'fs';
+import * as stream from "stream";
+import {Stats} from "fs";
 
 @injectable()
 export class LocalFilesystem implements IFilesystem {

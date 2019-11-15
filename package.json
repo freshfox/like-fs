@@ -1,0 +1,47 @@
+{
+  "name": "node-fs-firebase",
+  "version": "0.0.0",
+  "description": "",
+  "repository": "git@github.com:freshfox/node-fs-firebase.git",
+  "author": "Freshfox OG",
+  "license": "MIT",
+  "private": false,
+  "main": "dist/app/index.js",
+  "types": "dist/app/index.d.ts",
+  "directories": {
+    "test": "src/test",
+    "lib": "src"
+  },
+  "files": [
+    "dist/",
+    "src/",
+    "test/",
+    ".editorconfig",
+    "tsconfig.json",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "scripts": {
+    "test": "NODE_ENV=test mocha dist/test",
+    "build": "tsc",
+    "preversion": "git pull && yarn build && yarn test",
+    "postversion": "git push --follow-tags && npm publish"
+  },
+  "devDependencies": {
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.12.8",
+    "mocha": "^6.2.2",
+    "should": "^13.2.3",
+    "ts-node": "^8.5.2",
+    "typescript": "^3.7.2"
+  },
+  "dependencies": {
+    "@google-cloud/storage": "^4.1.2",
+    "firebase-admin": "^8.7.0",
+    "inversify": "^5.0.1",
+    "node-fs-local": "^1.0.1",
+    "reflect-metadata": "^0.1.13"
+  }
+}

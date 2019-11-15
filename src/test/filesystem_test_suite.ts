@@ -1,6 +1,6 @@
 import * as path from 'path';
-import {IFilesystem} from "./filesystem";
-import {awaitWriteFinish} from "./utils";
+import {IFilesystem} from "../lib/filesystem/filesystem";
+import {awaitWriteFinish} from "../lib/filesystem/utils";
 
 export function createFilesystemTestSuite(baseDirectory: string, fs: IFilesystem) {
 

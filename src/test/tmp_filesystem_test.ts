@@ -11,7 +11,7 @@ describe('TmpFilesystem', () => {
 
 	createFilesystemTestSuite(randomString(), fs);
 
-	describe('#dirStat', () => {
+	describe('#dirStat()', () => {
 		it('should get directory stats', async () => {
 
 			const dir = 'some-dir';

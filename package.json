@@ -6,8 +6,8 @@
   "author": "Freshfox OG",
   "license": "MIT",
   "private": false,
-  "main": "dist/app/index.js",
-  "types": "dist/app/index.d.ts",
+  "main": "dist/lib/index.js",
+  "types": "dist/lib/index.d.ts",
   "directories": {
     "test": "src/test",
     "lib": "src"

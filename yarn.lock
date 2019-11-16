@@ -1143,10 +1143,10 @@ node-forge@^0.9.0:
   resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.9.1.tgz#775368e6846558ab6676858a4d8c6e8d16c677b5"
   integrity sha512-G6RlQt5Sb4GMBzXvhfkeFmbqR6MzhtnT7VTHuLadjkii3rdYHNdw0m8zA4BTxVIh68FicCQ2NSUANpsqkr9jvQ==
 
-node-fs-local@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/node-fs-local/-/node-fs-local-1.0.1.tgz#c62601e2866a6d769c56ca40626c2b7a92781536"
-  integrity sha512-zERU2nTZldB982htcRneJfx0oLQP97lNfGHrU7VHIp2V2SYaA3IXj3r4kBFdo2jcVffMkDd4J6PYvM9UqXausw==
+node-fs-local@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/node-fs-local/-/node-fs-local-1.1.1.tgz#54aff1d517487b0055f0e56493edbe87688fb846"
+  integrity sha512-WMr7/jYFeTAk9rdmSm+jpPC6UCSoDdPHfccR7HgASqEczKUc/Jj0tA/djbseo3xsi5gNy8O1RHtecBWcxoA23g==
   dependencies:
     inversify "^5.0.1"
     mkdirp "^0.5.1"

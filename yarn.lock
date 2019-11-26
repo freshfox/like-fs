@@ -1120,6 +1120,11 @@ ms@^2.0.0, ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
+node-env-file@^0.1.8:
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/node-env-file/-/node-env-file-0.1.8.tgz#fccb7b050f735b5a33da9eb937cf6f1ab457fb69"
+  integrity sha1-/Mt7BQ9zW1oz2p65N89vGrRX+2k=
+
 node-environment-flags@1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/node-environment-flags/-/node-environment-flags-1.0.5.tgz#fa930275f5bf5dae188d6192b24b4c8bbac3d76a"
@@ -1143,10 +1148,10 @@ node-forge@^0.9.0:
   resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.9.1.tgz#775368e6846558ab6676858a4d8c6e8d16c677b5"
   integrity sha512-G6RlQt5Sb4GMBzXvhfkeFmbqR6MzhtnT7VTHuLadjkii3rdYHNdw0m8zA4BTxVIh68FicCQ2NSUANpsqkr9jvQ==
 
-node-fs-local@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/node-fs-local/-/node-fs-local-1.1.1.tgz#54aff1d517487b0055f0e56493edbe87688fb846"
-  integrity sha512-WMr7/jYFeTAk9rdmSm+jpPC6UCSoDdPHfccR7HgASqEczKUc/Jj0tA/djbseo3xsi5gNy8O1RHtecBWcxoA23g==
+node-fs-local@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/node-fs-local/-/node-fs-local-1.1.3.tgz#9d4a2f619e75598c37ec5ac33855d400246872a6"
+  integrity sha512-tMg5Vjod/fGYtOBGv4f+D7h38ktMoKz/WjAhL1PNVEL3IpLxLjEyDucBfEcY1Rjm2SUBl6hFz6IRw7u6Ncu/Jw==
   dependencies:
     inversify "^5.0.1"
     mkdirp "^0.5.1"
@@ -1606,7 +1611,7 @@ util-deprecate@^1.0.1, util-deprecate@~1.0.1:
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
 
-uuid@^3.3.2:
+uuid@^3.3.2, uuid@^3.3.3:
   version "3.3.3"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.3.tgz#4568f0216e78760ee1dbf3a4d2cf53e224112866"
   integrity sha512-pW0No1RGHgzlpHJO1nsVrHKpOEIxkGg1xB+v0ZmdNH5OAeAwzAVrCnI2/6Mtx+Uys6iaylxa+D3g4j63IKKjSQ==

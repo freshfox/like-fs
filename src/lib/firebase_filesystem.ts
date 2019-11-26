@@ -1,8 +1,9 @@
 import * as admin from 'firebase-admin';
 import {inject, injectable} from 'inversify';
 import * as stream from 'stream';
-import {GetSignedUrlConfig} from "@google-cloud/storage";
-import {awaitWriteFinish, GetUrlOptions, IOnlineFilesystem, Stats} from "node-fs-local";
+import {GetSignedUrlConfig} from '@google-cloud/storage';
+import {awaitWriteFinish, GetUrlOptions, IOnlineFilesystem, Stats} from 'node-fs-local';
+import * as uuid from 'uuid/v4';
 
 export interface FirebaseFileMetaData {
 	kind?: string,
@@ -21,7 +22,7 @@ export interface FirebaseFileMetaData {
 export const FirebaseStorage = Symbol('FirebaseStorage');
 
 @injectable()
-export class FirebaseFilesystem implements IOnlineFilesystem {
+export class FirebaseFilesystem implements IOnlineFilesystem<FirebaseFileMetaData> {
 
 	constructor(@inject(FirebaseStorage) private storage: admin.storage.Storage) {
 	}
@@ -46,7 +47,12 @@ export class FirebaseFilesystem implements IOnlineFilesystem {
 	}
 
 	async readFile(path: string, encoding?: string): Promise<string | Buffer> {
-		throw new Error('FirebaseFilesystem.readFile() not implemented')
+		const data = await this.storage.bucket().file(path).download();
+		const buffer = data[0];
+		if (encoding === 'utf8') {
+			return buffer.toString(encoding);
+		}
+		return buffer;
 	}
 
 	unlink(path: string): Promise<any> {
@@ -97,16 +103,33 @@ export class FirebaseFilesystem implements IOnlineFilesystem {
 
 	async lstat(path: string): Promise<Stats> {
 		const metadata = await this.getMetadata(path);
-		const size = parseInt(metadata[0].size, 10) || 0;
+		const size = parseInt(metadata.size, 10) || 0;
 		return {size};
 	}
 
-	getMetadata(path: string): Promise<[FirebaseFileMetaData, any]> {
-		return this.storage.bucket().file(path).getMetadata();
+	async getMetadata(path: string): Promise<FirebaseFileMetaData> {
+		const meta = await this.storage.bucket().file(path).getMetadata();
+		return meta[0];
 	}
 
-	setMetadata(path: string, metadata: FirebaseFileMetaData): Promise<any> {
-		return this.storage.bucket().file(path).setMetadata(metadata, {})
+	async setMetadata(path: string, metadata: FirebaseFileMetaData): Promise<FirebaseFileMetaData> {
+		const res = await this.storage.bucket().file(path).setMetadata(metadata, {});
+		return res[0];
+	}
+
+	static createUrl(bucket: string, path: string, token: string){
+		return {
+			token: token,
+			url: `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodeURIComponent(path)}?alt=media&token=${token}`
+		}
+	}
+
+	static generateTokenAndUrl(bucket: string, path: string) {
+		const token = uuid();
+		return {
+			token,
+			url: this.createUrl(bucket, path, token)
+		}
 	}
 
 }

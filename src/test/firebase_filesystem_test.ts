@@ -1,10 +1,20 @@
-import {FirebaseFilesystem} from "../lib/firebase_filesystem";
-import {randomString} from "node-fs-local";
-import {createFilesystemTestSuite} from "node-fs-local/dist/test";
+import {FirebaseFilesystem} from '../lib/firebase_filesystem';
+import {randomString} from 'node-fs-local';
+import {createFilesystemTestSuite} from 'node-fs-local/dist/test';
+import * as admin from 'firebase-admin';
+import {loadEnv} from './index';
 
 describe('FirebaseFilesystem', function () {
 
-	const fs = new FirebaseFilesystem(null);
+	loadEnv();
+
+	admin.initializeApp({
+		credential: admin.credential.applicationDefault(),
+		storageBucket: process.env.STORAGE_BUCKET,
+		databaseURL: 'https://<DATABASE_NAME>.firebaseio.com'
+	});
+
+	const fs = new FirebaseFilesystem(admin.storage());
 	const testDir = randomString();
 
 	createFilesystemTestSuite(testDir, fs);
@@ -12,7 +22,7 @@ describe('FirebaseFilesystem', function () {
 	const dateIn = (days: number) => {
 		const date = new Date();
 		date.setDate(date.getDate() + days);
-		return days;
+		return date;
 	};
 
 	describe('#getDownloadUrl()', () => {

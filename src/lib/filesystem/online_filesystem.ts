@@ -6,9 +6,9 @@ export interface IOnlineFilesystem extends IFilesystem {
 
 	getDownloadUrl(path: string, validUntil: Date, options?: GetUrlOptions): Promise<string>;
 
-	setMetadata(path: string, metadata: any): Promise<any>;
+	setMetadata<M>(path: string, metadata: M): Promise<any>;
 
-	getMetadata(path: string): Promise<any>
+	getMetadata<M>(path: string): Promise<M>
 
 }
 

@@ -118,10 +118,7 @@ export class FirebaseFilesystem implements IOnlineFilesystem<FirebaseFileMetaDat
 	}
 
 	static createUrl(bucket: string, path: string, token: string){
-		return {
-			token: token,
-			url: `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodeURIComponent(path)}?alt=media&token=${token}`
-		}
+		`https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodeURIComponent(path)}?alt=media&token=${token}`
 	}
 
 	static generateTokenAndUrl(bucket: string, path: string) {

@@ -3,6 +3,7 @@ import {randomString} from 'node-fs-local';
 import {createFilesystemTestSuite} from 'node-fs-local/dist/test';
 import * as admin from 'firebase-admin';
 import {loadEnv} from './index';
+import * as should from 'should';
 
 describe('FirebaseFilesystem', function () {
 
@@ -27,8 +28,9 @@ describe('FirebaseFilesystem', function () {
 
 	describe('#getDownloadUrl()', () => {
 
-		it('should asd', async () => {
+		it('should create a download url', async () => {
 			const downloadUrl = await fs.getDownloadUrl(`${testDir}/image.jpg`, dateIn(3), null);
+			should(downloadUrl).type('string')
 		});
 
 	});

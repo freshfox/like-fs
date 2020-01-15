@@ -1,6 +1,6 @@
 import {IFilesystem} from './filesystem';
 
-export interface IOnlineFilesystem<Meta> extends IFilesystem {
+export interface IOnlineFilesystem<Meta = any> extends IFilesystem {
 
 	getUploadUrl(path: string, validUntil: Date, options?: GetUrlOptions): Promise<string>;
 

@@ -3,7 +3,9 @@ import {randomString} from "../lib/filesystem/utils";
 import {createFilesystemTestSuite} from "./filesystem_test_suite";
 import * as should from 'should';
 
-describe('TmpFilesystem', () => {
+describe('TmpFilesystem', function () {
+
+	this.timeout(5000);
 
 	const fs = new TmpFilesystem({
 		tmpDirectory: `/tmp/node-fs-local`
@@ -34,15 +36,13 @@ describe('TmpFilesystem', () => {
 		});
 	});
 
-	describe('#touch', function () {
+	describe('#touch', () => {
 
 		it('should touch a file', async () => {
-
 			const file = 'touch-me.txt';
 			await fs.touch(file);
 			await fs.touch(file);
 			const exists = await fs.exists(file);
-
 			should(exists).true()
 		});
 

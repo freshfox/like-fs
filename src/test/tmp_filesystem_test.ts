@@ -3,9 +3,7 @@ import {randomString} from "../lib/filesystem/utils";
 import {createFilesystemTestSuite} from "./filesystem_test_suite";
 import * as should from 'should';
 
-describe('TmpFilesystem', function () {
-
-	this.timeout(5000);
+describe('TmpFilesystem', () => {
 
 	const fs = new TmpFilesystem({
 		tmpDirectory: `/tmp/node-fs-local`

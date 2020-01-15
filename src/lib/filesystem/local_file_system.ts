@@ -165,6 +165,7 @@ export class LocalFilesystem implements IFilesystem {
 						});
 					});
 				}
+				resolve();
 			});
 		})
 	}

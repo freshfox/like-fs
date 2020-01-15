@@ -34,4 +34,18 @@ describe('TmpFilesystem', () => {
 		});
 	});
 
+	describe('#touch', function () {
+
+		it('should touch a file', async () => {
+
+			const file = 'touch-me.txt';
+			await fs.touch(file);
+			await fs.touch(file);
+			const exists = await fs.exists(file);
+
+			should(exists).true()
+		});
+
+	});
+
 });

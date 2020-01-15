@@ -144,4 +144,28 @@ export class LocalFilesystem implements IFilesystem {
 		}
 		return size;
 	}
+
+	async touch(path: string) {
+		await this.ensureDirectoryExists(path);
+		const absPath = this.getPath(path);
+		return new Promise<void>((resolve, reject) => {
+			const ts = Date.now();
+			fs.utimes(absPath, ts, ts, err => {
+				if (err) {
+					fs.open(absPath, 'w', (err, fd) => {
+						if (err) {
+							return reject(err)
+						}
+						fs.close(fd, err => {
+							if (err) {
+								return reject(err)
+							} else {
+								return resolve();
+							}
+						});
+					});
+				}
+			});
+		})
+	}
 }

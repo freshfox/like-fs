@@ -32,7 +32,7 @@ export class LocalFilesystem implements IFilesystem {
 		return fs.createReadStream(this.getPath(path), opts);
 	}
 
-	readFile(path: string, encoding?: 'utf8'): Promise<string>;
+	readFile(path: string, encoding: 'utf8'): Promise<string>;
 	readFile(path: string, encoding?: string): Promise<Buffer>;
 
 	readFile(path: string, encoding?: string): Promise<string | Buffer> {

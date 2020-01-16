@@ -1,6 +1,6 @@
 {
   "name": "node-fs-local",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Typed wrapper around the fs module and providing interfaces for cloud implementations",
   "repository": "git@github.com:freshfox/node-fs-local.git",
   "author": "Freshfox OG",

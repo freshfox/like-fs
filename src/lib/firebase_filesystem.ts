@@ -1,5 +1,5 @@
 import * as admin from 'firebase-admin';
-import {inject, injectable} from 'inversify';
+import {inject, injectable, optional} from 'inversify';
 import * as stream from 'stream';
 import {GetSignedUrlConfig} from '@google-cloud/storage';
 import {awaitWriteFinish, GetUrlOptions, IOnlineFilesystem, Stats} from 'node-fs-local';
@@ -21,25 +21,33 @@ export interface FirebaseFileMetaData {
 
 export const FirebaseStorage = Symbol('FirebaseStorage');
 
+export interface IFirebaseStorageConfig {
+	storageBucket?: string;
+}
+
 @injectable()
 export class FirebaseFilesystem implements IOnlineFilesystem<FirebaseFileMetaData> {
 
-	constructor(@inject(FirebaseStorage) private storage: admin.storage.Storage) {
+	constructor(@inject(FirebaseStorage) private readonly storage: admin.storage.Storage,
+				@optional() private readonly config?: IFirebaseStorageConfig) {
+		if (!this.config) {
+			this.config = {};
+		}
 	}
 
 	createWriteStream(file: string, opts?: any): stream.Writable {
-		return this.storage.bucket().file(file).createWriteStream({
+		return this.getBucket().file(file).createWriteStream({
 			...opts,
 			resumable: false
 		});
 	}
 
 	createReadStream(path: string, opts?: any): stream.Readable {
-		return this.storage.bucket().file(path).createReadStream(opts);
+		return this.getBucket().file(path).createReadStream(opts);
 	}
 
 	async exists(path: string): Promise<boolean> {
-		return (await this.storage.bucket().file(path).exists())[0];
+		return (await this.getBucket().file(path).exists())[0];
 	}
 
 	mkdir(path: string): Promise<void> {
@@ -47,7 +55,7 @@ export class FirebaseFilesystem implements IOnlineFilesystem<FirebaseFileMetaDat
 	}
 
 	async readFile(path: string, encoding?: string): Promise<string | Buffer> {
-		const data = await this.storage.bucket().file(path).download();
+		const data = await this.getBucket().file(path).download();
 		const buffer = data[0];
 		if (encoding === 'utf8') {
 			return buffer.toString(encoding);
@@ -56,11 +64,11 @@ export class FirebaseFilesystem implements IOnlineFilesystem<FirebaseFileMetaDat
 	}
 
 	unlink(path: string): Promise<any> {
-		return this.storage.bucket().file(path).delete();
+		return this.getBucket().file(path).delete();
 	}
 
 	writeStreamToFile(path: string, stream: stream.Readable, options?: any): Promise<any> {
-		const writeStream = this.storage.bucket().file(path).createWriteStream({
+		const writeStream = this.getBucket().file(path).createWriteStream({
 			...options,
 			resumable: false,
 		});
@@ -70,7 +78,7 @@ export class FirebaseFilesystem implements IOnlineFilesystem<FirebaseFileMetaDat
 
 	async readDir(path: string): Promise<string[]> {
 		path = path[path.length - 1] === '/' ? path : `${path}/`;
-		const resp = await this.storage.bucket().getFiles({
+		const resp = await this.getBucket().getFiles({
 			prefix: path
 		});
 		const files = resp[0];
@@ -82,7 +90,7 @@ export class FirebaseFilesystem implements IOnlineFilesystem<FirebaseFileMetaDat
 
 	async getUploadUrl(path: string, validUntil: Date, opts?: Partial<GetSignedUrlConfig>) {
 		opts = opts || {};
-		const resp = await this.storage.bucket().file(path).getSignedUrl(<GetSignedUrlConfig>{
+		const resp = await this.getBucket().file(path).getSignedUrl(<GetSignedUrlConfig>{
 			version: 'v4',
 			contentType: 'video/mp4',
 			action: 'write',
@@ -93,7 +101,7 @@ export class FirebaseFilesystem implements IOnlineFilesystem<FirebaseFileMetaDat
 
 	async getDownloadUrl(path: string, validUntil: Date, options?: GetUrlOptions): Promise<string> {
 		const dateStr = validUntil.toISOString().substring(0, 10);
-		const resp = await this.storage.bucket().file(path).getSignedUrl({
+		const resp = await this.getBucket().file(path).getSignedUrl({
 			action: 'read',
 			expires: dateStr,
 			contentType: options && options.contentType ? options.contentType : null
@@ -108,13 +116,17 @@ export class FirebaseFilesystem implements IOnlineFilesystem<FirebaseFileMetaDat
 	}
 
 	async getMetadata(path: string): Promise<FirebaseFileMetaData> {
-		const meta = await this.storage.bucket().file(path).getMetadata();
+		const meta = await this.getBucket().file(path).getMetadata();
 		return meta[0];
 	}
 
 	async setMetadata(path: string, metadata: FirebaseFileMetaData): Promise<FirebaseFileMetaData> {
-		const res = await this.storage.bucket().file(path).setMetadata(metadata, {});
+		const res = await this.getBucket().file(path).setMetadata(metadata, {});
 		return res[0];
+	}
+
+	private getBucket() {
+		return this.storage.bucket(this.config.storageBucket);
 	}
 
 	static createUrl(bucket: string, path: string, token: string){

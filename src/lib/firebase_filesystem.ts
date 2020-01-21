@@ -20,6 +20,7 @@ export interface FirebaseFileMetaData {
 }
 
 export const FirebaseStorage = Symbol('FirebaseStorage');
+export const FirebaseStorageConfig = Symbol('FirebaseStorageConfig');
 
 export interface IFirebaseStorageConfig {
 	storageBucket?: string;
@@ -29,7 +30,7 @@ export interface IFirebaseStorageConfig {
 export class FirebaseFilesystem implements IOnlineFilesystem<FirebaseFileMetaData> {
 
 	constructor(@inject(FirebaseStorage) private readonly storage: admin.storage.Storage,
-				@optional() private readonly config?: IFirebaseStorageConfig) {
+				@inject(FirebaseStorageConfig) @optional() private readonly config?: IFirebaseStorageConfig) {
 		if (!this.config) {
 			this.config = {};
 		}

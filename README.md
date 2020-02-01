@@ -14,25 +14,26 @@
 
 ## Overview
 `node-fs-local` provides a simple way of abstracting filesystem access.
-This package includes two main classes. Those are the `LocalFilesystem` and
+This package includes two main classes. Those are `LocalFilesystem` and
 the `TmpFilesystem`. The most basic way to access the local filesystem is the `LocalFilesystem`.
-It is a simple wrapper around the node's standard `fs` module, exposing the same API
+It is a simple wrapper around node's standard `fs` module, exposing the same API
 as the `fs` module. When possible, all functions are asynchronous returning a `Promise`
 so `async/await` can be used.
 
-A key benefit of using this package is that directories don't have to be created.
-When writing a file directly or using streams directories will always be created.
+A key benefit of using this package is that directories don't have to be created,
+since every write operation, be it using streams or
+writing files directly, will ensure that the directory structure exists beforehand.
 
 The `TmpFilesystem` is used to access files in the tmp directory. The difference between
-this and the `LocalFilesystem` is that the root is mounted to a random or configured
-directory in the `/tmp` directory. All method calls to the `TmpFilesystem` are relative
-to the configured directory. For example when calling `fs.createReadStream('/images/logo.png')`
+this and the `LocalFilesystem` is that the root is mounted to a directory in `/tmp`.
+All method calls to the `TmpFilesystem` are relative to this configured directory.
+So for example when calling `fs.createReadStream('/images/logo.png')`
 you're actually creating a `ReadStream` to `/tmp/<some-dir>/images/logo.png`
 
 The package also includes an interface `IOnlineFilesystem` for implementations to access filesystems like
-`S3`, `Google Cloud Storage`, `Firebase Storage`, etc.
+` AWS S3`, `Google Cloud Storage`, `Firebase Storage`, etc.
 
-`node-fs-local` is fully compatible with the dependency injection library Inversify
+`node-fs-local` is written in Typescript and is fully compatible with the dependency injection library Inversify.
 
 ## Example
 ```typescript
@@ -64,51 +65,51 @@ $ yarn add node-fs-local
 
 ### LocalFilesystem
 
-#### createWriteStream(path: string, opts?: any): Writable;
+#### .createWriteStream(path: string, opts?: any): Writable;
 Returns a WriteStream from the standard `fs` module.
 See [fs.createWriteStream()](https://nodejs.org/api/fs.html#fs_fs_createwritestream_path_options)
 for more details
 
-#### createReadStream(path: string, opts?: any): Readable;
+#### .createReadStream(path: string, opts?: any): Readable;
 Returns a ReadStream from the standard `fs` module.
 See [fs.createReadStream()](https://nodejs.org/api/fs.html#fs_fs_createreadstream_path_options)
 for more details
 
-#### readFile(path: string, encoding?: string): Promise<string|Buffer>;
+#### .readFile(path: string, encoding?: string): Promise<string|Buffer>;
 Reads the file with the given encoding. If encoding is `utf8`
 The return value will be a string, otherwise it'll be a `Buffer`
 
-#### exists(path: string): Promise<boolean>;
+#### .exists(path: string): Promise<boolean>;
 Returns `true` if the file exists, otherwise will return `false`
 
-#### writeStreamToFile(path: string, stream: Readable, options?): Promise<any>;
+#### .writeStreamToFile(path: string, stream: Readable, options?): Promise<any>;
 This is a helper function to asynchronously write a given ReadStream
 to a file. The `Promise` resolves once the write finishes.
 
-### writeDataToFile(path: string, data: any, options?: any)
+### .writeDataToFile(path: string, data: any, options?: any)
 Works exactly like [fs.writeFile()](https://nodejs.org/api/fs.html#fs_fs_writefile_file_data_options_callback)
 
-#### unlink(path: string): Promise<any>;
+#### .unlink(path: string): Promise<any>;
 Deletes the given file if it exists
 
-#### mkdir(path: string): Promise<void>;
+#### .mkdir(path: string): Promise<void>;
 Creates a directory structure like `mkdir -p`. You only need this
 when you want to create a directory without writing a file. All methods
 which write files will automatically create the required directory
 structure beforehand.
 
-#### readDir(path: string): Promise<string[]>
+#### .readDir(path: string): Promise<string[]>
 Returns a string array of paths of the containing files and directories
 All paths are relative to the given path.
 
-#### lstat(path: string): Promise<Stats>
+#### .lstat(path: string): Promise<Stats>
 Returns the size of a file
 
-#### dirSize(directory: string): Promise<number>
+#### .dirSize(directory: string): Promise<number>
 Recursively calculates the sizes of all files and directories below
 the given path and returns the number in bytes
 
-#### touch(path: string): Promise<void>
+#### .touch(path: string): Promise<void>
 Creates an empty file at the given path
 
 ### TmpFilesystem

@@ -1,7 +1,5 @@
 import {Readable, Writable} from 'stream';
 import * as crypto from 'crypto';
-import {IFilesystem} from './filesystem';
-import * as fs from "fs";
 
 export function awaitWriteFinish(stream: Writable) {
 	return new Promise((resolve, reject) => {

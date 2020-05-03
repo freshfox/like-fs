@@ -130,6 +130,10 @@ export class FirebaseFilesystem implements IOnlineFilesystem<FirebaseFileMetaDat
 		return this.getBucket().file(path).makePublic();
 	}
 
+	getPublicUrl(path: string) {
+		return `https://${this.config.storageBucket}.storage.googleapis.com/${path}`;
+	}
+
 	private getBucket() {
 		return this.storage.bucket(this.config.storageBucket);
 	}

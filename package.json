@@ -30,10 +30,10 @@
     "postversion": "git push --follow-tags && npm publish"
   },
   "devDependencies": {
-    "@types/mocha": "^5.2.7",
+    "@types/mocha": "^7.0.2",
     "@types/node": "^12.12.8",
     "firebase-admin": "^8.8.0",
-    "mocha": "^6.2.2",
+    "mocha": "^7.1.2",
     "node-env-file": "^0.1.8",
     "should": "^13.2.3",
     "ts-node": "^8.5.2",

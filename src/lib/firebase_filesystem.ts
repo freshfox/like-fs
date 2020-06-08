@@ -3,7 +3,7 @@ import {inject, injectable, optional} from 'inversify';
 import * as stream from 'stream';
 import {GetSignedUrlConfig} from '@google-cloud/storage';
 import {awaitWriteFinish, GetUrlOptions, IOnlineFilesystem, Stats} from 'node-fs-local';
-import * as uuid from 'uuid/v4';
+import {v4 as uuid} from 'uuid';
 
 export interface FirebaseFileMetaData {
 	kind?: string,

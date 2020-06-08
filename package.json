@@ -32,7 +32,7 @@
   "devDependencies": {
     "@types/mocha": "^7.0.2",
     "@types/node": "^13.13.4",
-    "firebase-admin": "^8.11.0",
+    "firebase-admin": "^8.12.1",
     "mocha": "^7.1.2",
     "node-env-file": "^0.1.8",
     "should": "^13.2.3",

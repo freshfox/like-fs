@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "inversify": "^5.0.1",
-    "mkdirp": "^1.0.3",
+    "mkdirp": "^1.0.4",
     "reflect-metadata": "^0.1.13"
   }
 }

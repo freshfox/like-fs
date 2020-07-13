@@ -107,16 +107,9 @@ export class LocalFilesystem implements IFilesystem {
 		});
 	}
 
-	ensureDirectoryExists(file: string) {
+	ensureDirectoryExists(file: string): Promise<void> {
 		const dir = path.dirname(this.getPath(file));
-		return new Promise((resolve, reject) => {
-			mkdirp(dir, (err) => {
-				if (err) {
-					return reject(err);
-				}
-				return resolve();
-			});
-		});
+		return mkdirp(dir);
 	}
 
 	lstat(file: string): Promise<Stats> {

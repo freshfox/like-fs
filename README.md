@@ -1,4 +1,6 @@
-# node-fs-local
+# Filesystem for Node
+> Abstraction layer for local and cloud filesystems
+
 [![npm version](https://badge.fury.io/js/node-fs-local.svg)](https://badge.fury.io/js/node-fs-local)
 [![Dependencies](https://david-dm.org/freshfox/node-fs-local.svg)](https://david-dm.org/freshfox/node-fs-local#info=dependencies)
 [![img](https://david-dm.org/freshfox/node-fs-local/dev-status.svg)](https://david-dm.org/freshfox/node-fs-local/#info=devDependencies)
@@ -29,6 +31,8 @@ this and the `LocalFilesystem` is that the root is mounted to a directory in `/t
 All method calls to the `TmpFilesystem` are relative to this configured directory.
 So for example when calling `fs.createReadStream('/images/logo.png')`
 you're actually creating a `ReadStream` to `/tmp/<some-dir>/images/logo.png`
+
+`node-fs-local@2.0.0` requires Node 10.
 
 The package also includes an interface `IOnlineFilesystem` for implementations to access filesystems like
 ` AWS S3`, `Google Cloud Storage`, `Firebase Storage`, etc.

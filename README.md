@@ -13,7 +13,7 @@
 * [Cloud Filesystem](#cloud-filesystem)
 
 ## Overview
-`node-fs-local` provides a simple way of abstracting filesystem access.
+`node-fs-local` provides a simple layer of abstraction for accessing filesystems.
 This package includes two main classes. Those are `LocalFilesystem` and
 the `TmpFilesystem`. The most basic way to access the local filesystem is the `LocalFilesystem`.
 It is a simple wrapper around node's standard `fs` module, exposing the same API

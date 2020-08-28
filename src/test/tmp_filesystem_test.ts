@@ -46,4 +46,22 @@ describe('TmpFilesystem', () => {
 
 	});
 
+	describe('#writeBuffer', function () {
+
+		it('should overwrite contents of a file at the beginning', async () => {
+
+			const file = 'overriding.txt';
+
+			const buf1 = Buffer.from('Hello world', 'utf8');
+			await fs.writeBuffer(file, 'w+', buf1, 0);
+			const buf2 = Buffer.from('Other', 'utf8');
+			await fs.writeBuffer(file, 'r+', buf2, 0);
+
+			const content = await fs.readFile(file, 'utf8');
+			should(content).eql('Other world');
+
+		});
+
+	});
+
 });

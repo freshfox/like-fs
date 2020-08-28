@@ -5,7 +5,7 @@ import * as mkdirp from 'mkdirp';
 import * as path from 'path';
 import {IFilesystem} from './filesystem';
 import * as stream from "stream";
-import {Stats} from "fs";
+import {Stats, promises as fsPromise} from "fs";
 
 @injectable()
 export class LocalFilesystem implements IFilesystem {
@@ -45,6 +45,13 @@ export class LocalFilesystem implements IFilesystem {
 				}
 			})
 		});
+	}
+
+	async writeBuffer(file: string, flags: string, buffer: Buffer, position: number) {
+		await this.ensureDirectoryExists(file);
+		const fh = await fsPromise.open(this.getPath(file), flags);
+		await fh.write(buffer, 0, buffer.length, position)
+		await fh.close();
 	}
 
 	writeStreamToFile(file: string, stream: stream.Readable, options?) {

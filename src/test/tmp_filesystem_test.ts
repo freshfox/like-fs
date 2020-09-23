@@ -53,7 +53,7 @@ describe('TmpFilesystem', () => {
 			const file = 'overriding.txt';
 
 			const buf1 = Buffer.from('Hello world', 'utf8');
-			await fs.writeBuffer(file, 'w+', buf1, 0);
+			await fs.writeBuffer(file, 'w', buf1, 0);
 			const buf2 = Buffer.from('Other', 'utf8');
 			await fs.writeBuffer(file, 'r+', buf2, 0);
 

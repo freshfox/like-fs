@@ -39,7 +39,7 @@ export class FirebaseFilesystem implements IOnlineFilesystem<FirebaseFileMetaDat
 	createWriteStream(file: string, opts?: any): stream.Writable {
 		return this.getBucket().file(file).createWriteStream({
 			...opts,
-			resumable: false
+			resumable: false,
 		});
 	}
 
@@ -69,10 +69,7 @@ export class FirebaseFilesystem implements IOnlineFilesystem<FirebaseFileMetaDat
 	}
 
 	writeStreamToFile(path: string, stream: stream.Readable, options?: any): Promise<any> {
-		const writeStream = this.getBucket().file(path).createWriteStream({
-			...options,
-			resumable: false,
-		});
+		const writeStream = this.createWriteStream(path, options);
 		stream.pipe(writeStream);
 		return awaitWriteFinish(writeStream);
 	}

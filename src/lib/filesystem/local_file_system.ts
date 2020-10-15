@@ -93,6 +93,12 @@ export class LocalFilesystem implements IFilesystem {
 		});
 	}
 
+	unlinkDir(path: string) {
+		return new Promise((resolve, reject) => {
+		    fs.rmdir
+		})
+	}
+
 	// noinspection JSMethodCanBeStatic
 	getPath(path: string) {
 		return path;

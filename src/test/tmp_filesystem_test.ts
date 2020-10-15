@@ -61,6 +61,23 @@ describe('TmpFilesystem', () => {
 			should(content).eql('Other world');
 
 		});
+	});
+
+	describe('#unlinkDir', function () {
+
+		it('should delete a directory with subdirectories', async () => {
+
+			const base = 'unlink-me';
+			const dir = base + '/' + randomString();
+
+			await fs.touch(dir + '/test1.txt');
+			await fs.touch(dir + '/subdir/test2.txt');
+			await fs.unlinkDir(dir);
+
+			await fs.exists(base).should.resolvedWith(true);
+			await fs.exists(dir).should.resolvedWith(false);
+
+		});
 
 	});
 

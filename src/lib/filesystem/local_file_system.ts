@@ -6,6 +6,17 @@ import * as path from 'path';
 import {IFilesystem} from './filesystem';
 import * as stream from "stream";
 import {Stats, promises as fsPromise} from "fs";
+import * as rimraf from 'rimraf';
+
+function handleCallback(resolve, reject) {
+	return (err, data) => {
+		if (err) {
+			reject(err);
+		} else {
+			resolve(data);
+		}
+	}
+}
 
 @injectable()
 export class LocalFilesystem implements IFilesystem {
@@ -95,8 +106,10 @@ export class LocalFilesystem implements IFilesystem {
 
 	unlinkDir(path: string) {
 		return new Promise((resolve, reject) => {
-		    fs.rmdir
-		})
+			rimraf(this.getPath(path), {
+				glob: false
+			}, handleCallback(resolve, reject));
+		});
 	}
 
 	// noinspection JSMethodCanBeStatic

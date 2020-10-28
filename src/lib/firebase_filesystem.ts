@@ -1,9 +1,9 @@
 import * as admin from 'firebase-admin';
-import {inject, injectable, optional} from 'inversify';
 import * as stream from 'stream';
 import {GetSignedUrlConfig} from '@google-cloud/storage';
 import {awaitWriteFinish, GetUrlOptions, IOnlineFilesystem, Stats} from 'node-fs-local';
 import {v4 as uuid} from 'uuid';
+import {inject, injectable, optional} from "./di";
 
 export interface FirebaseFileMetaData {
 	kind?: string,

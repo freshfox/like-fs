@@ -7,6 +7,7 @@ import {IFilesystem} from './filesystem';
 import * as stream from "stream";
 import {Stats, promises as fsPromise} from "fs";
 import * as rimraf from 'rimraf';
+import {Injectable} from "@nestjs/common";
 
 function handleCallback(resolve, reject) {
 	return (err, data) => {
@@ -18,7 +19,7 @@ function handleCallback(resolve, reject) {
 	}
 }
 
-@injectable()
+@injectable() @Injectable()
 export class LocalFilesystem implements IFilesystem {
 
 	exists(path: string): Promise<boolean> {

@@ -30,6 +30,7 @@
     "postversion": "git push --follow-tags && npm publish"
   },
   "devDependencies": {
+    "@nestjs/testing": "^7.4.4",
     "@types/mocha": "^7.0.2",
     "@types/node": "^14.11.5",
     "firebase-admin": "^9.2.0",
@@ -45,6 +46,7 @@
     "inversify": "^5.0.1",
     "node-fs-local": "^2.2.0",
     "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.6.3",
     "uuid": "^8.3.1"
   },
   "peerDependencies": {

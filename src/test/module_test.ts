@@ -34,17 +34,21 @@ describe('NestJS', function () {
 
 		@Module({
 			imports: [
-				AuthModule,
 				FilesystemNestModule.register({
-					imports: [AuthModule],
-					fsProvider: {
-						useClass: MyFs
+					useFactory: (config) => {
+					    return {
+					    	tmpDirectory: `/tmp/` + config.counter
+						}
 					},
-					tmpConfig: {
-						useValue: {}
-					}
+					inject: ['myfs-config']
 				})
-			]
+					.imports([AuthModule])
+					.build()
+			],
+			providers: [{
+				provide: Filesystem,
+				useExisting: TmpFilesystem
+			}]
 		})
 		class ConsumerModule {
 
@@ -52,11 +56,10 @@ describe('NestJS', function () {
 
 		const module = await Test.createTestingModule({
 			imports: [ConsumerModule],
-			exports: [ConsumerModule]
 		}).compile();
 
 		const fs = module.get<IFilesystem>(Filesystem);
-		fs.should.instanceOf(MyFs);
+		fs.should.instanceOf(TmpFilesystem);
 
 		const config = module.get('myfs-config');
 		console.log(config);

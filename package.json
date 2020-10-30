@@ -30,6 +30,7 @@
     "postversion": "git push --follow-tags && npm publish"
   },
   "devDependencies": {
+    "@nestjs/testing": "^7.4.4",
     "@types/mocha": "^7.0.1",
     "@types/node": "^10.17.39",
     "mocha": "^7.0.1",

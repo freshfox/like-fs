@@ -29,7 +29,7 @@ export interface IFirebaseStorageConfig {
 export class FirebaseFilesystem implements IOnlineFilesystem<FirebaseFileMetaData> {
 
 	constructor(@inject(FirebaseStorage) private readonly storage: Storage,
-				@inject(FirebaseStorageConfig) @optional() private readonly config?: IFirebaseStorageConfig) {
+				@inject(FirebaseStorageConfig) private readonly config: IFirebaseStorageConfig) {
 		if (!this.config) {
 			this.config = {};
 		}

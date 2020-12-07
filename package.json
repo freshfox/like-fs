@@ -25,7 +25,8 @@
   },
   "scripts": {
     "test": "NODE_ENV=test mocha dist/test",
-    "build": "tsc",
+    "build": "yarn clean && tsc",
+    "clean": "rm -rf dist",
     "preversion": "git pull && yarn build && yarn test",
     "postversion": "git push --follow-tags && npm publish"
   },

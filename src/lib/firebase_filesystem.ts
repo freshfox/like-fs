@@ -1,6 +1,5 @@
-import * as admin from 'firebase-admin';
 import * as stream from 'stream';
-import {GetSignedUrlConfig} from '@google-cloud/storage';
+import {GetSignedUrlConfig, Storage} from '@google-cloud/storage';
 import {awaitWriteFinish, GetUrlOptions, IOnlineFilesystem, Stats} from 'node-fs-local';
 import {v4 as uuid} from 'uuid';
 import {inject, injectable, optional} from "./di";
@@ -29,7 +28,7 @@ export interface IFirebaseStorageConfig {
 @injectable()
 export class FirebaseFilesystem implements IOnlineFilesystem<FirebaseFileMetaData> {
 
-	constructor(@inject(FirebaseStorage) private readonly storage: admin.storage.Storage,
+	constructor(@inject(FirebaseStorage) private readonly storage: Storage,
 				@inject(FirebaseStorageConfig) @optional() private readonly config?: IFirebaseStorageConfig) {
 		if (!this.config) {
 			this.config = {};

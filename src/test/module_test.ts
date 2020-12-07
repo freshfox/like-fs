@@ -66,4 +66,16 @@ describe('NestJS', function () {
 
 	});
 
+	it('should inject TmpFilesystem', async () => {
+		const mod = FilesystemNestModule.forRoot({tmpDirectory: '/tmp/node-fs-local'})
+		const module = await Test.createTestingModule({
+			imports: [mod],
+			exports: [mod]
+		}).compile();
+
+		const fs = module.get(TmpFilesystem);
+		console.log(fs);
+
+	});
+
 });

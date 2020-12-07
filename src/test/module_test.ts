@@ -5,7 +5,7 @@ import 'should';
 
 describe('NestJS', function () {
 	let counter = 0;
-	it('should inject a custom default fs implementation', async () => {
+	xit('should inject a custom default fs implementation', async () => {
 
 		const authProviders: Provider[] = [{
 			provide: 'myfs-config',

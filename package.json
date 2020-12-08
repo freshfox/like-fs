@@ -31,9 +31,9 @@
   },
   "devDependencies": {
     "@nestjs/testing": "^7.5.5",
-    "@types/mocha": "^7.0.2",
+    "@types/mocha": "^8.0.4",
     "@types/node": "^14.11.5",
-    "mocha": "^7.1.2",
+    "mocha": "^8.2.1",
     "node-env-file": "^0.1.8",
     "should": "^13.2.3",
     "ts-node": "^9.1.1",

@@ -9,19 +9,11 @@ describe('Dependency Injection', function () {
 
 	describe('NestJS', function () {
 
+		const module = GCSFilesystemModule.forRoot(null, null);
+
 		@Module({
-			imports: [GCSFilesystemModule],
-			providers: [
-				GCSFilesystem,
-				{
-					provide: GCStorage,
-					useValue: null
-				}, {
-					provide: GCStorageConfig,
-					useValue: null
-				}
-			],
-			exports: [GCSFilesystemModule],
+			imports: [module],
+			exports: [module],
 		})
 		class TestModule {}
 

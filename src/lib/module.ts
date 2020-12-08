@@ -1,21 +1,25 @@
-import {DynamicModule} from "@nestjs/common";
-import {FilesystemNestModule, ITmpFilesystemConfig} from "node-fs-local";
-import {GCSFilesystem} from "./gcs_filesystem";
+import {DynamicModule, Provider} from "@nestjs/common";
+import {GCSFilesystem, GCStorage, GCStorageConfig, IGCStorageConfig} from "./gcs_filesystem";
+import {Storage} from "@google-cloud/storage";
 
 export class GCSFilesystemModule {
 
-	static forRoot(config: ITmpFilesystemConfig): DynamicModule {
-		const fsModule = FilesystemNestModule.forRoot(config);
+	static forRoot(storage: Storage, config: IGCStorageConfig): DynamicModule {
+		const providers: Provider[] = [
+			GCSFilesystem,
+			{
+				provide: GCStorage,
+				useValue: storage
+			},
+			{
+				provide: GCStorageConfig,
+				useValue: config
+			}
+		]
 		return {
 			module: GCSFilesystemModule,
-			imports: [FilesystemNestModule],
-			providers: [
-				GCSFilesystem
-			],
-			exports: [
-				GCSFilesystem,
-				fsModule
-			],
+			providers: providers,
+			exports: providers,
 		}
 	}
 

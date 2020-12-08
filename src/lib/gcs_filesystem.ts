@@ -1,5 +1,5 @@
 import * as stream from 'stream';
-import {GetSignedUrlConfig, Storage} from '@google-cloud/storage';
+import {GetSignedUrlConfig, Storage, StorageOptions} from '@google-cloud/storage';
 import {awaitWriteFinish, GetUrlOptions, IOnlineFilesystem, Stats} from 'node-fs-local';
 import {v4 as uuid} from 'uuid';
 import {inject, injectable} from "./di";
@@ -22,7 +22,8 @@ export const GCStorage = Symbol('GCStorage');
 export const GCStorageConfig = Symbol('GCStorageConfig');
 
 export interface IGCStorageConfig {
-	storageBucket?: string;
+	storageBucket: string;
+	storageOptions?: StorageOptions;
 }
 
 @injectable()
@@ -30,9 +31,6 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 
 	constructor(@inject(GCStorage) private readonly storage: Storage,
 				@inject(GCStorageConfig) private readonly config: IGCStorageConfig) {
-		if (!this.config) {
-			this.config = {};
-		}
 	}
 
 	createWriteStream(file: string, opts?: any): stream.Writable {

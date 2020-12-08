@@ -4,16 +4,17 @@ import {Storage} from "@google-cloud/storage";
 
 export class GCSFilesystemModule {
 
-	static forRoot(storage: Storage, config: IGCStorageConfig): DynamicModule {
+	static forRoot(config: IGCStorageConfig): DynamicModule {
+		const storage = new Storage(config.storageOptions);
 		const providers: Provider[] = [
 			GCSFilesystem,
 			{
-				provide: GCStorage,
-				useValue: storage
-			},
-			{
 				provide: GCStorageConfig,
 				useValue: config
+			},
+			{
+				provide: GCStorage,
+				useValue: storage
 			}
 		]
 		return {

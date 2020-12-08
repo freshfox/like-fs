@@ -4,12 +4,15 @@ import {Test} from "@nestjs/testing";
 import 'should';
 import {Container} from "inversify";
 import {GCSFilesystemModule} from "../lib/module";
+import {Storage} from "@google-cloud/storage";
 
 describe('Dependency Injection', function () {
 
 	describe('NestJS', function () {
 
-		const module = GCSFilesystemModule.forRoot(null, null);
+		const module = GCSFilesystemModule.forRoot({
+			storageBucket: 'my-test-bucket',
+		});
 
 		@Module({
 			imports: [module],
@@ -26,6 +29,9 @@ describe('Dependency Injection', function () {
 
 			const fs = moduleRef.get(GCSFilesystem);
 			fs.should.instanceOf(GCSFilesystem);
+
+			const storage = moduleRef.get(GCStorage);
+			storage.should.instanceOf(Storage);
 		});
 	});
 

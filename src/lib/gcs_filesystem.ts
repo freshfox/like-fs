@@ -2,9 +2,9 @@ import * as stream from 'stream';
 import {GetSignedUrlConfig, Storage} from '@google-cloud/storage';
 import {awaitWriteFinish, GetUrlOptions, IOnlineFilesystem, Stats} from 'node-fs-local';
 import {v4 as uuid} from 'uuid';
-import {inject, injectable, optional} from "./di";
+import {inject, injectable} from "./di";
 
-export interface FirebaseFileMetaData {
+export interface GCFileMetaData {
 	kind?: string,
 	id?: string;
 	name?: string;
@@ -18,18 +18,18 @@ export interface FirebaseFileMetaData {
 	}
 }
 
-export const FirebaseStorage = Symbol('FirebaseStorage');
-export const FirebaseStorageConfig = Symbol('FirebaseStorageConfig');
+export const GCStorage = Symbol('GCStorage');
+export const GCStorageConfig = Symbol('GCStorageConfig');
 
-export interface IFirebaseStorageConfig {
+export interface IGCStorageConfig {
 	storageBucket?: string;
 }
 
 @injectable()
-export class FirebaseFilesystem implements IOnlineFilesystem<FirebaseFileMetaData> {
+export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 
-	constructor(@inject(FirebaseStorage) private readonly storage: Storage,
-				@inject(FirebaseStorageConfig) private readonly config: IFirebaseStorageConfig) {
+	constructor(@inject(GCStorage) private readonly storage: Storage,
+				@inject(GCStorageConfig) private readonly config: IGCStorageConfig) {
 		if (!this.config) {
 			this.config = {};
 		}
@@ -112,12 +112,12 @@ export class FirebaseFilesystem implements IOnlineFilesystem<FirebaseFileMetaDat
 		return {size};
 	}
 
-	async getMetadata(path: string): Promise<FirebaseFileMetaData> {
+	async getMetadata(path: string): Promise<GCFileMetaData> {
 		const meta = await this.getBucket().file(path).getMetadata();
 		return meta[0];
 	}
 
-	async setMetadata(path: string, metadata: FirebaseFileMetaData): Promise<FirebaseFileMetaData> {
+	async setMetadata(path: string, metadata: GCFileMetaData): Promise<GCFileMetaData> {
 		const res = await this.getBucket().file(path).setMetadata(metadata, {});
 		return res[0];
 	}
@@ -145,5 +145,4 @@ export class FirebaseFilesystem implements IOnlineFilesystem<FirebaseFileMetaDat
 			url: this.createUrl(bucket, path, token)
 		}
 	}
-
 }

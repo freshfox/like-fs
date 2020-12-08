@@ -1,15 +1,15 @@
-import {FirebaseFilesystem} from '../lib/firebase_filesystem';
+import {GCSFilesystem} from '../lib/gcs_filesystem';
 import {randomString} from 'node-fs-local';
 import {createFilesystemTestSuite} from 'node-fs-local/dist/test';
 import {loadEnv} from './index';
 import * as should from 'should';
 import {Storage} from "@google-cloud/storage";
 
-describe('FirebaseFilesystem', function () {
+describe('GCSFilesystem', function () {
 
 	loadEnv();
 
-	const fs = new FirebaseFilesystem(new Storage(), {
+	const fs = new GCSFilesystem(new Storage(), {
 		storageBucket: process.env.STORAGE_BUCKET
 	});
 	const testDir = randomString();

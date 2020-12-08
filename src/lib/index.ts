@@ -1,1 +1,1 @@
-export * from './firebase_filesystem';
+export * from './gcs_filesystem';

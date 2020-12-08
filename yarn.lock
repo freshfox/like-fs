@@ -1087,10 +1087,10 @@ node-forge@^0.10.0:
   resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.10.0.tgz#32dea2afb3e9926f02ee5ce8794902691a676bf3"
   integrity sha512-PPmu8eEeG9saEUvI97fm4OYxXVB6bFvyNTyiUOBichBpFG8A1Ljw3bY62+5oOjDEMHRnd0Y7HQ+x7uzxOzC6JA==
 
-node-fs-local@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/node-fs-local/-/node-fs-local-2.2.0.tgz#66f1c75c97e599d9ca6297eb3134fc41d946b5b4"
-  integrity sha512-P4onJc3bm9oB9ALCfH97HBbMEaIYjQUXaV3PAaYNDpdXf4aSy+mYVOUWrah0nvbrDNSMS4SBF0lO4CblhGi+3w==
+node-fs-local@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/node-fs-local/-/node-fs-local-2.3.0.tgz#8b52bc3884ea8d2f68037cfb6ddd19a7576e55fc"
+  integrity sha512-ysNISSncUuK2HFCt5RJoHY2xLPSh/wxXvKRYH7kBqURK6m19+BS+4fCwF+Q4HSMXimcTw9FYnLdA6wotVqi5tQ==
   dependencies:
     "@nestjs/common" "^7.4.4"
     "@nestjs/core" "^7.4.4"

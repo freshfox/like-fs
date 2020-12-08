@@ -1,24 +1,21 @@
-import {DynamicModule, Module, ModuleMetadata} from "@nestjs/common";
-import {FilesystemNestModule} from "node-fs-local";
-import {FirebaseFilesystem} from "./firebase_filesystem";
+import {DynamicModule} from "@nestjs/common";
+import {FilesystemNestModule, ITmpFilesystemConfig} from "node-fs-local";
+import {GCSFilesystem} from "./gcs_filesystem";
 
-const moduleDesc: ModuleMetadata = {
-	imports: [FilesystemNestModule],
-	providers: [
-		FirebaseFilesystem
-	],
-	exports: [
-		FirebaseFilesystem
-	],
-}
+export class GCSFilesystemModule {
 
-@Module(moduleDesc)
-export class FirebaseFilesystemModule {
-
-	static forRoot(): DynamicModule {
+	static forRoot(config: ITmpFilesystemConfig): DynamicModule {
+		const fsModule = FilesystemNestModule.forRoot(config);
 		return {
-			module: FirebaseFilesystemModule,
-			...moduleDesc
+			module: GCSFilesystemModule,
+			imports: [FilesystemNestModule],
+			providers: [
+				GCSFilesystem
+			],
+			exports: [
+				GCSFilesystem,
+				fsModule
+			],
 		}
 	}
 

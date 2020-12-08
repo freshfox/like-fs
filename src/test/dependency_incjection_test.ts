@@ -1,47 +1,53 @@
 import {Module} from "@nestjs/common";
-import {FirebaseFilesystem, FirebaseStorage} from "../lib";
+import {GCSFilesystem, GCStorage, GCStorageConfig} from "../lib";
 import {Test} from "@nestjs/testing";
 import 'should';
 import {Container} from "inversify";
+import {GCSFilesystemModule} from "../lib/module";
 
 describe('Dependency Injection', function () {
 
 	describe('NestJS', function () {
 
 		@Module({
+			imports: [GCSFilesystemModule],
 			providers: [
-				FirebaseFilesystem,
+				GCSFilesystem,
 				{
-					provide: FirebaseStorage,
+					provide: GCStorage,
+					useValue: null
+				}, {
+					provide: GCStorageConfig,
 					useValue: null
 				}
 			],
-			exports: [FirebaseFilesystem],
+			exports: [GCSFilesystemModule],
 		})
 		class TestModule {}
 
-		it('should get a Firebase fs instance', async () => {
+		it('should get a GCS fs instance', async () => {
 
 			const moduleRef = await Test.createTestingModule({
 				imports: [TestModule],
 				exports: [TestModule]
 			}).compile();
 
-			const fs = moduleRef.get(FirebaseFilesystem);
-			fs.should.instanceOf(FirebaseFilesystem);
+			const fs = moduleRef.get(GCSFilesystem);
+			fs.should.instanceOf(GCSFilesystem);
 		});
 	});
 
 	describe('Inversify', function () {
 
-		it('should get a Firebase fs instance', async () => {
+		it('should get a GCS fs instance', async () => {
 
 			const container = new Container();
-			container.bind(FirebaseFilesystem).toSelf().inSingletonScope();
-			container.bind(FirebaseStorage).toConstantValue(null);
+			container.bind(GCSFilesystem).toSelf().inSingletonScope();
+			container.bind(GCStorage).toConstantValue(null);
+			container.bind(GCStorageConfig).toConstantValue(null);
 
-			const fs = container.get(FirebaseFilesystem);
-			fs.should.instanceOf(FirebaseFilesystem);
+			const fs = container.get(GCSFilesystem);
+			fs.should.instanceOf(GCSFilesystem);
 
 		});
 

@@ -32,17 +32,18 @@ const baseProviders: Provider[] = [
 export class FilesystemNestModule {
 
 	static forRoot(config: ITmpFilesystemConfig): DynamicModule {
+		const provider: Provider[] = [
+			LocalFilesystem,
+			TmpFilesystem,
+			{
+				provide: TmpFilesystemConfig,
+				useValue: config
+			}
+		]
 		return {
 			module: FilesystemNestModule,
-			providers: [
-				LocalFilesystem,
-				TmpFilesystem,
-				{
-					provide: TmpFilesystemConfig,
-					useValue: config
-				}
-			],
-			exports: [FilesystemNestModule]
+			providers: provider,
+			exports: provider
 		}
 	}
 

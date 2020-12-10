@@ -74,7 +74,7 @@ describe('NestJS', function () {
 		}).compile();
 
 		const fs = module.get(TmpFilesystem);
-		console.log(fs);
+		fs.should.instanceOf(TmpFilesystem);
 
 	});
 

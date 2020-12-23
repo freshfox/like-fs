@@ -14,10 +14,6 @@
   },
   "files": [
     "dist/",
-    "src/",
-    "test/",
-    ".editorconfig",
-    "tsconfig.json",
     "README.md"
   ],
   "engines": {
@@ -25,10 +21,8 @@
   },
   "scripts": {
     "test": "NODE_ENV=test mocha dist/test",
-    "build": "yarn clean && tsc",
-    "clean": "rm -rf dist",
-    "preversion": "git pull && yarn build && yarn test",
-    "postversion": "git push --follow-tags && npm publish"
+    "build": "yarn clean && tsc --build",
+    "clean": "rm -rf dist"
   },
   "devDependencies": {
     "@nestjs/testing": "^7.4.4",

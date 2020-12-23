@@ -12,6 +12,7 @@ jspm_packages/
 .env
 
 dist/
+tsconfig.tsbuildinfo
 
 ### IDEs ###
 .idea/

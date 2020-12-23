@@ -1,5 +1,5 @@
 import {LocalFilesystem} from './local_file_system';
-import * as path from 'path';
+import path from 'path';
 import {inject, injectable} from 'inversify';
 import {randomString} from "./utils";
 import {Inject, Injectable} from "@nestjs/common";

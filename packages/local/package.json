@@ -20,9 +20,9 @@
     "node": ">=10"
   },
   "scripts": {
-    "test": "NODE_ENV=test mocha dist/test",
+    "test": "NODE_ENV=test mocha -r ts-node/register src/test/**/*.ts",
     "build": "yarn clean && tsc --build",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist tsconfig.tsbuildinfo"
   },
   "devDependencies": {
     "@nestjs/testing": "^7.6.4",

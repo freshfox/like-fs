@@ -1,5 +1,5 @@
 import {Readable, Writable} from 'stream';
-import * as crypto from 'crypto';
+import crypto from 'crypto';
 import {get as getHttps} from 'https';
 import {get as getHttp, IncomingMessage} from "http";
 

@@ -1,6 +1,6 @@
 import * as stream from 'stream';
 import {GetSignedUrlConfig, Storage, StorageOptions} from '@google-cloud/storage';
-import {awaitWriteFinish, GetUrlOptions, IOnlineFilesystem, Stats} from 'node-fs-local';
+import {awaitWriteFinish, GetUrlOptions, IOnlineFilesystem, Stats} from 'like-fs';
 import {v4 as uuid} from 'uuid';
 import {inject, injectable} from "./di";
 

@@ -1,10 +1,10 @@
-# Filesystem for Node
-> Abstraction layer for local and cloud filesystems
+# like-fs
+> A thin abstraction layer for accessing local and cloud filesystems with an API like-fs
 
-[![npm version](https://badge.fury.io/js/node-fs-local.svg)](https://badge.fury.io/js/node-fs-local)
-[![Dependencies](https://david-dm.org/freshfox/node-fs-local.svg)](https://david-dm.org/freshfox/node-fs-local#info=dependencies)
-[![img](https://david-dm.org/freshfox/node-fs-local/dev-status.svg)](https://david-dm.org/freshfox/node-fs-local/#info=devDependencies)
-[![Known Vulnerabilities](https://snyk.io/test/github/freshfox/node-fs-local/badge.svg)](https://snyk.io/test/github/freshfox/node-fs-local)
+[![npm version](https://badge.fury.io/js/like-fs.svg)](https://badge.fury.io/js/like-fs)
+[![Dependencies](https://david-dm.org/freshfox/like-fs.svg)](https://david-dm.org/freshfox/like-fs#info=dependencies)
+[![img](https://david-dm.org/freshfox/like-fs/dev-status.svg)](https://david-dm.org/freshfox/like-fs/#info=devDependencies)
+[![Known Vulnerabilities](https://snyk.io/test/github/freshfox/like-fs/badge.svg)](https://snyk.io/test/github/freshfox/like-fs)
 
 ## Table of Contents
 
@@ -15,7 +15,7 @@
 * [Cloud Filesystem](#cloud-filesystem)
 
 ## Overview
-`node-fs-local` provides a simple layer of abstraction for accessing filesystems.
+`like-fs` is a thin layer of abstraction for accessing filesystems.
 This package includes two main classes. Those are `LocalFilesystem` and
 the `TmpFilesystem`. The most basic way to access the local filesystem is the `LocalFilesystem`.
 It is a simple wrapper around node's standard `fs` module, exposing the same API
@@ -32,17 +32,17 @@ All method calls to the `TmpFilesystem` are relative to this configured director
 So for example when calling `fs.createReadStream('/images/logo.png')`
 you're actually creating a `ReadStream` to `/tmp/<some-dir>/images/logo.png`
 
-`node-fs-local@2.0.0` requires Node 10.
+`like-fs@2.0.0` requires Node 10.
 
 The package also includes an interface `IOnlineFilesystem` for implementations to access filesystems like
 ` AWS S3`, `Google Cloud Storage`, `Firebase Storage`, etc.
 
-`node-fs-local` is written in Typescript and is fully compatible with the dependency injection library Inversify.
+`like-fs` is written in Typescript and is fully compatible with the dependency injection library Inversify.
 
 ## Example
 ```typescript
 import * as os from 'os';
-import {TmpFilesystem, awaitWriteFinish} from "node-fs-local";
+import {TmpFilesystem, awaitWriteFinish} from "like-fs";
 
 const fs = new TmpFilesystem({
 	tmpDirectory: os.tmpdir() + '/my-project'
@@ -61,8 +61,8 @@ await awaitWriteFinish(
 The package is available via the `npm` registry
 
 ```
-$ npm install node-fs-local
-$ yarn add node-fs-local
+$ npm install like-fs
+$ yarn add like-fs
 ```
 
 ## Reference

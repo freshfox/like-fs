@@ -1,12 +1,12 @@
 import 'reflect-metadata';
-import * as fs from 'fs';
+import fs from 'fs';
 import {injectable} from 'inversify';
-import * as mkdirp from 'mkdirp';
-import * as path from 'path';
+import mkdirp from 'mkdirp';
+import path from 'path';
 import {IFilesystem} from './filesystem';
-import * as stream from "stream";
+import stream from "stream";
 import {Stats, promises as fsPromise} from "fs";
-import * as rimraf from 'rimraf';
+import rimraf from 'rimraf';
 import {Injectable} from "@nestjs/common";
 
 function handleCallback(resolve, reject) {

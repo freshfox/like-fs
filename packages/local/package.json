@@ -1,8 +1,8 @@
 {
-  "name": "node-fs-local",
+  "name": "like-fs",
   "version": "2.3.1",
   "description": "Typed wrapper around the fs module and providing interfaces for cloud implementations",
-  "repository": "git@github.com:freshfox/node-fs-local.git",
+  "repository": "git@github.com:freshfox/like-fs.git",
   "author": "Freshfox OG",
   "license": "MIT",
   "private": false,

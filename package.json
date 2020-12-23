@@ -1,0 +1,12 @@
+{
+  "name": "like-fs",
+  "version": "1.0.0",
+  "description": "A thin layer of filesystem abstraction to access local and cloud storage like-fs",
+  "main": "index.js",
+  "repository": "git@github.com:freshfox/like-fs.git",
+  "author": "Dominic Bartl <dominic@freshfox.at>",
+  "license": "MIT",
+  "devDependencies": {
+    "lerna": "^3.22.1"
+  }
+}

@@ -1,8 +1,8 @@
 {
-  "name": "node-fs-firebase",
+  "name": "like-fs-local",
   "version": "4.2.0",
   "description": "",
-  "repository": "git@github.com:freshfox/node-fs-firebase.git",
+  "repository": "git@github.com:freshfox/like-fs.git",
   "author": "Freshfox OG",
   "license": "MIT",
   "private": false,

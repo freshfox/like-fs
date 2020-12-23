@@ -3,7 +3,7 @@ node_js:
   - "10"
   - "12"
   - "14"
-after_install:
+before_script:
   - yarn lerna bootstrap
 env:
   - PACKAGE=packages/local
@@ -17,7 +17,9 @@ notifications:
 jobs:
   include:
     - stage: compile
-      script: cd $PACKAGE && yarn build
+      script: cd packages/local && yarn build
+      script: cd packages/gcs && yarn build
     - stage: test
-      script: cd $PACKAGE && yarn test
+      script: cd packages/local && yarn test
+      script: cd packages/gcs && yarn test
 

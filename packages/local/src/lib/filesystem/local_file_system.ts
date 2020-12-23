@@ -93,7 +93,7 @@ export class LocalFilesystem implements IFilesystem {
 		});
 	}
 
-	unlink(path: string) {
+	unlink(path: string): Promise<void> {
 		return new Promise((resolve, reject) => {
 			fs.unlink(this.getPath(path), (err) => {
 				if (err) {

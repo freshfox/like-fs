@@ -16,7 +16,7 @@ export interface IFilesystem {
 
 	writeStreamToFile(path: string, stream: Readable, options?): Promise<any>;
 
-	unlink(path: string): Promise<any>;
+	unlink(path: string): Promise<void>;
 
 	mkdir(path: string): Promise<void>;
 

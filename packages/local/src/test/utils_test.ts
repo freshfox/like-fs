@@ -1,5 +1,5 @@
 import {downloadFileFromUrl, TmpFilesystem} from "../lib";
-import * as should from 'should';
+import should from 'should';
 
 describe('Utils', function () {
 

@@ -1,7 +1,7 @@
 import {TmpFilesystem} from "../lib/filesystem/tmp_file_system";
 import {randomString} from "../lib/filesystem/utils";
 import {createFilesystemTestSuite} from "./filesystem_test_suite";
-import * as should from 'should';
+import should from 'should';
 
 describe('TmpFilesystem', () => {
 

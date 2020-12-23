@@ -1,0 +1,53 @@
+{
+  "name": "node-fs-firebase",
+  "version": "4.2.0",
+  "description": "",
+  "repository": "git@github.com:freshfox/node-fs-firebase.git",
+  "author": "Freshfox OG",
+  "license": "MIT",
+  "private": false,
+  "main": "dist/lib/index.js",
+  "types": "dist/lib/index.d.ts",
+  "directories": {
+    "test": "src/test",
+    "lib": "src"
+  },
+  "files": [
+    "dist/",
+    "src/",
+    "test/",
+    ".editorconfig",
+    "tsconfig.json",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "test": "NODE_ENV=test mocha dist/test",
+    "build": "rm -rf dist && tsc",
+    "preversion": "git pull && yarn build && yarn test",
+    "postversion": "git push --follow-tags && npm publish"
+  },
+  "devDependencies": {
+    "@nestjs/testing": "^7.5.5",
+    "@types/mocha": "^8.0.4",
+    "@types/node": "10",
+    "mocha": "^8.2.1",
+    "node-env-file": "^0.1.8",
+    "should": "^13.2.3",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.2"
+  },
+  "dependencies": {
+    "@google-cloud/storage": "^5.6.0",
+    "@nestjs/common": "^7.5.5",
+    "@nestjs/core": "^7.5.5",
+    "inversify": "^5.0.1",
+    "node-fs-local": "^2.3.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.6.3",
+    "uuid": "^8.3.1"
+  },
+  "peerDependencies": {}
+}

@@ -14,12 +14,22 @@ notifications:
   email: false
   webhooks: "https://ship.freshfox.at/travis/-1001141933878"
 
+stages:
+  - compile
+  - test
+
 jobs:
   include:
     - stage: compile
-      script: cd packages/local && yarn build
-      script: cd packages/gcs && yarn build
+      script:
+        - echo "Running in package ${PACKAGE}"
+        - cd ${PACKAGE}
+        - pwd
+        - yarn build
     - stage: test
-      script: cd packages/local && yarn test
-      script: cd packages/gcs && yarn test
+      script:
+        - echo "Running in package ${PACKAGE}"
+        - cd ${PACKAGE}
+        - pwd
+        - yarn test
 

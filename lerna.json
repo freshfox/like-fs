@@ -2,5 +2,5 @@
   "packages": [
     "packages/*"
   ],
-  "version": "individual"
+  "version": "independent"
 }

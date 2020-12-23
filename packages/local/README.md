@@ -32,12 +32,10 @@ All method calls to the `TmpFilesystem` are relative to this configured director
 So for example when calling `fs.createReadStream('/images/logo.png')`
 you're actually creating a `ReadStream` to `/tmp/<some-dir>/images/logo.png`
 
-`like-fs@2.0.0` requires Node 10.
-
 The package also includes an interface `IOnlineFilesystem` for implementations to access filesystems like
 ` AWS S3`, `Google Cloud Storage`, `Firebase Storage`, etc.
 
-`like-fs` is written in Typescript and is fully compatible with the dependency injection library Inversify.
+`like-fs` is written in Typescript and is fully compatible with the dependency injection library Inversify and NestJS.
 
 ## Example
 ```typescript

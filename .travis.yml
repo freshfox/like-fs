@@ -1,0 +1,23 @@
+language: node_js
+node_js:
+  - "10"
+  - "12"
+  - "14"
+install:
+  - yarn lerna bootstrap
+env:
+  - PACKAGE=packages/local
+  - PACKAGE=packages/gcs
+
+cache: yarn
+notifications:
+  email: false
+  webhooks: "https://ship.freshfox.at/travis/-1001141933878"
+
+jobs:
+  include:
+    - stage: compile
+      script: cd $PACKAGE && yarn build
+    - stage: test
+      script: cd $PACKAGE && yarn test
+

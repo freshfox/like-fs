@@ -1,5 +1,5 @@
 {
-  "name": "like-fs-local",
+  "name": "like-fs-gcs",
   "version": "4.2.0",
   "description": "",
   "repository": "git@github.com:freshfox/like-fs.git",

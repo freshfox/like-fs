@@ -24,12 +24,10 @@ jobs:
       script:
         - echo "Running in package ${PACKAGE}"
         - cd ${PACKAGE}
-        - pwd
         - yarn build
     - stage: test
       script:
         - echo "Running in package ${PACKAGE}"
         - cd ${PACKAGE}
-        - pwd
         - yarn test
 

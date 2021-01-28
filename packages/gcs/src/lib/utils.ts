@@ -1,4 +1,5 @@
 import {v4 as uuid} from "uuid";
+import {IOnlineFilesystem} from "like-fs";
 
 export class FirebaseUtils {
 
@@ -12,6 +13,16 @@ export class FirebaseUtils {
 			token,
 			url: this.createUrl(bucket, path, token)
 		}
+	}
+
+	static async generateFirebaseStorageUrl(fs: IOnlineFilesystem, path: string): Promise<string> {
+		const {token, url} = this.generateTokenAndUrl(fs.getBucketName(), path);
+		await fs.setMetadata(path, {
+			metadata: {
+				firebaseStorageDownloadTokens: token
+			}
+		});
+		return url;
 	}
 
 }

@@ -3,6 +3,7 @@ import {GetSignedUrlConfig, Storage, StorageOptions} from '@google-cloud/storage
 import {awaitWriteFinish, GetUrlOptions, IOnlineFilesystem, Stats} from 'like-fs';
 import {v4 as uuid} from 'uuid';
 import {inject, injectable} from "./di";
+import {FirebaseUtils} from "./utils";
 
 export interface GCFileMetaData {
 	kind?: string,
@@ -132,15 +133,13 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 		return this.storage.bucket(this.config.storageBucket);
 	}
 
+	/**@deprecated Use FirebaseUtils instead*/
 	static createUrl(bucket: string, path: string, token: string){
-		return `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodeURIComponent(path)}?alt=media&token=${token}`
+		return FirebaseUtils.createUrl(bucket, path, token);
 	}
 
+	/**@deprecated Use FirebaseUtils instead*/
 	static generateTokenAndUrl(bucket: string, path: string) {
-		const token = uuid();
-		return {
-			token,
-			url: this.createUrl(bucket, path, token)
-		}
+		return FirebaseUtils.generateTokenAndUrl(bucket, path);
 	}
 }

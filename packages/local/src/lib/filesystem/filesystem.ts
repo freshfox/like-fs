@@ -1,8 +1,8 @@
 import {Readable, Writable} from "stream";
 
-export const FilesystemConfig = Symbol('FilesystemConfig');
+export const FilesystemConfig = Symbol.for('LikeFS.FilesystemConfig');
 
-export const Filesystem = Symbol('Filesystem');
+export const Filesystem = Symbol.for('LikeFS.Filesystem');
 
 export interface IFilesystem {
 

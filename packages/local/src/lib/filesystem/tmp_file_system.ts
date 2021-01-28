@@ -4,7 +4,7 @@ import {inject, injectable} from 'inversify';
 import {randomString} from "./utils";
 import {Inject, Injectable} from "@nestjs/common";
 
-export const TmpFilesystemConfig = Symbol('TmpFilesystemConfig');
+export const TmpFilesystemConfig = Symbol.for('LikeFS.TmpFilesystemConfig');
 
 @injectable() @Injectable()
 export class TmpFilesystem extends LocalFilesystem {

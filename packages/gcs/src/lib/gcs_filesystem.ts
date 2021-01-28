@@ -18,8 +18,8 @@ export interface GCFileMetaData {
 	}
 }
 
-export const GCStorage = Symbol('GCStorage');
-export const GCStorageConfig = Symbol('GCStorageConfig');
+export const GCStorage = Symbol.for('LikeFS.GCStorage');
+export const GCStorageConfig = Symbol.for('LikeFs.GCStorageConfig');
 
 export interface IGCStorageConfig {
 	storageBucket: string;

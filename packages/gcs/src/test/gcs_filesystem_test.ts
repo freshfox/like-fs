@@ -28,6 +28,12 @@ describe('GCSFilesystem', function () {
 			const downloadUrl = await fs.getDownloadUrl(`${testDir}/image.jpg`, dateIn(3), null);
 			should(downloadUrl).type('string')
 		});
+	});
 
+	describe('#getBucketName()', function () {
+		it('should get the buckets name', async () => {
+			const name = fs.getBucketName();
+			should(name).eql(process.env.STORAGE_BUCKET).type('string');
+		});
 	});
 });

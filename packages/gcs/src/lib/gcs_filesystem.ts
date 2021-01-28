@@ -1,7 +1,6 @@
 import * as stream from 'stream';
 import {GetSignedUrlConfig, Storage, StorageOptions} from '@google-cloud/storage';
 import {awaitWriteFinish, GetUrlOptions, IOnlineFilesystem, Stats} from 'like-fs';
-import {v4 as uuid} from 'uuid';
 import {inject, injectable} from "./di";
 import {FirebaseUtils} from "./utils";
 
@@ -127,6 +126,10 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 
 	getPublicUrl(path: string) {
 		return `https://${this.config.storageBucket}.storage.googleapis.com/${path}`;
+	}
+
+	getBucketName() {
+		return this.config.storageBucket;
 	}
 
 	private getBucket() {

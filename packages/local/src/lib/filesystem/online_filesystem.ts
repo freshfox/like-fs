@@ -8,7 +8,9 @@ export interface IOnlineFilesystem<Meta = any> extends IFilesystem {
 
 	setMetadata(path: string, metadata: Meta): Promise<Meta>;
 
-	getMetadata(path: string): Promise<Meta>
+	getMetadata(path: string): Promise<Meta>;
+
+	getBucketName(): string;
 
 }
 

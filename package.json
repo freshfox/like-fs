@@ -9,7 +9,8 @@
   "license": "MIT",
   "scripts": {
     "test": "lerna run --stream test",
-    "build": "lerna run --stream build"
+    "build": "lerna run --stream build",
+    "release": "yarn build && yarn test && lerna publish"
   },
   "devDependencies": {
     "lerna": "^3.22.1"

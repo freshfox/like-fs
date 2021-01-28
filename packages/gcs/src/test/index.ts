@@ -1,5 +1,5 @@
-import * as env from 'node-env-file';
-import * as fs from "fs";
+import env from 'node-env-file';
+import fs from "fs";
 
 export function loadEnv() {
 	const path = __dirname + '/../../.env';

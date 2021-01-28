@@ -5,30 +5,10 @@ node_js:
   - "14"
   - "15"
 before_script:
+  - echo $GOOGLE_APPLICATION_CREDENTIALS_BASE64 | base64 -d > /tmp/credentials.json
   - yarn lerna bootstrap
-env:
-  - PACKAGE=packages/local
-  - PACKAGE=packages/gcs
-
+  - yarn build
 cache: yarn
 notifications:
   email: false
   webhooks: "https://ship.freshfox.at/travis/-1001141933878"
-
-stages:
-  - compile
-  - test
-
-jobs:
-  include:
-    - stage: compile
-      script:
-        - echo "Running in package ${PACKAGE}"
-        - cd ${PACKAGE}
-        - yarn build
-    - stage: test
-      script:
-        - echo "Running in package ${PACKAGE}"
-        - cd ${PACKAGE}
-        - yarn test
-

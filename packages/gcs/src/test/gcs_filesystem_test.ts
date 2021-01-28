@@ -10,7 +10,7 @@ describe('GCSFilesystem', function () {
 	loadEnv();
 
 	const fs = new GCSFilesystem(new Storage(), {
-		storageBucket: process.env.STORAGE_BUCKET
+		storageBucket: process.env.STORAGE_BUCKET,
 	});
 	const testDir = randomString();
 

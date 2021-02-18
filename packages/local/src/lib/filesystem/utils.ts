@@ -2,10 +2,9 @@ import {Readable, Writable} from 'stream';
 import crypto from 'crypto';
 import {get as getHttps} from 'https';
 import {get as getHttp, IncomingMessage} from "http";
-import {WriteStream} from "fs";
 
 export function awaitWriteFinish(stream: Writable): Promise<void> {
-	if (stream instanceof WriteStream && !stream.writable) {
+	if (stream['writable'] === false) {
 		return;
 	}
 	return new Promise<void>((resolve, reject) => {

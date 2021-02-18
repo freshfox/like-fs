@@ -4,11 +4,13 @@ import {get as getHttps} from 'https';
 import {get as getHttp, IncomingMessage} from "http";
 
 export function awaitWriteFinish(stream: Writable): Promise<void> {
-	if (stream['writable'] === false) {
+	const state = stream['_writableState'];
+	if (state && state.ended === true && state.finished === true) {
 		return;
 	}
 	return new Promise<void>((resolve, reject) => {
 		stream.once('finish', resolve);
+		stream.once('close', resolve);
 		stream.once('error', reject)
 	});
 }

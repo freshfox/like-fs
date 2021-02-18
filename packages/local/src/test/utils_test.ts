@@ -1,7 +1,26 @@
-import {downloadFileFromUrl, TmpFilesystem} from "../lib";
+import {awaitWriteFinish, downloadFileFromUrl, TmpFilesystem, writeToStream} from "../lib";
 import should from 'should';
 
 describe('Utils', function () {
+
+	describe('#awaitWriteFinish()', function () {
+
+		it('should immediately finish an already finished write stream', async () => {
+
+			const file = `test-${Date.now()}.txt`
+			const fs = new TmpFilesystem({});
+			await fs.writeDataToFile(file, 'Data');
+			const write = fs.createWriteStream(file);
+			await new Promise<void>((resolve, reject) => {
+				write.end((err) => {
+					if (err) return reject(err);
+					resolve();
+				});
+			});
+			await awaitWriteFinish(write);
+		});
+
+	});
 
 	describe('#downloadFileFromUrl()', function () {
 

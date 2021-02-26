@@ -4,7 +4,7 @@ import {TmpFilesystem} from "./tmp_file_system";
 import {IOnlineFilesystem} from "./online_filesystem";
 
 @injectable() @Injectable()
-class FakeOnlineFilesystem extends TmpFilesystem implements IOnlineFilesystem {
+export class FakeOnlineFilesystem extends TmpFilesystem implements IOnlineFilesystem {
 
 	private metadata: { [path: string]: any; } = {};
 

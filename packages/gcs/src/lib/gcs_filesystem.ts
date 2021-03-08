@@ -34,18 +34,18 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 	}
 
 	createWriteStream(file: string, opts?: any): stream.Writable {
-		return this.getBucket().file(file).createWriteStream({
+		return this.getBucket().file(GCSFilesystem.sanitizePath(file)).createWriteStream({
 			...opts,
 			resumable: false,
 		});
 	}
 
 	createReadStream(path: string, opts?: any): stream.Readable {
-		return this.getBucket().file(path).createReadStream(opts);
+		return this.getBucket().file(GCSFilesystem.sanitizePath(path)).createReadStream(opts);
 	}
 
 	async exists(path: string): Promise<boolean> {
-		return (await this.getBucket().file(path).exists())[0];
+		return (await this.getBucket().file(GCSFilesystem.sanitizePath(path)).exists())[0];
 	}
 
 	mkdir(path: string): Promise<void> {
@@ -62,7 +62,7 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 	}
 
 	unlink(path: string): Promise<any> {
-		return this.getBucket().file(path).delete();
+		return this.getBucket().file(GCSFilesystem.sanitizePath(path)).delete();
 	}
 
 	writeStreamToFile(path: string, stream: stream.Readable, options?: any): Promise<any> {
@@ -85,7 +85,7 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 
 	async getUploadUrl(path: string, validUntil: Date, opts?: Partial<GetSignedUrlConfig>) {
 		opts = opts || {};
-		const resp = await this.getBucket().file(path).getSignedUrl(<GetSignedUrlConfig>{
+		const resp = await this.getBucket().file(GCSFilesystem.sanitizePath(path)).getSignedUrl(<GetSignedUrlConfig>{
 			version: 'v4',
 			contentType: 'video/mp4',
 			action: 'write',
@@ -96,7 +96,7 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 
 	async getDownloadUrl(path: string, validUntil: Date, options?: GetUrlOptions): Promise<string> {
 		const dateStr = validUntil.toISOString().substring(0, 10);
-		const resp = await this.getBucket().file(path).getSignedUrl({
+		const resp = await this.getBucket().file(GCSFilesystem.sanitizePath(path)).getSignedUrl({
 			action: 'read',
 			expires: dateStr,
 			contentType: options && options.contentType ? options.contentType : null
@@ -105,27 +105,27 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 	}
 
 	async lstat(path: string): Promise<Stats> {
-		const metadata = await this.getMetadata(path);
+		const metadata = await this.getMetadata(GCSFilesystem.sanitizePath(path));
 		const size = parseInt(metadata.size, 10) || 0;
 		return {size};
 	}
 
 	async getMetadata(path: string): Promise<GCFileMetaData> {
-		const meta = await this.getBucket().file(path).getMetadata();
+		const meta = await this.getBucket().file(GCSFilesystem.sanitizePath(path)).getMetadata();
 		return meta[0];
 	}
 
 	async setMetadata(path: string, metadata: GCFileMetaData): Promise<GCFileMetaData> {
-		const res = await this.getBucket().file(path).setMetadata(metadata, {});
+		const res = await this.getBucket().file(GCSFilesystem.sanitizePath(path)).setMetadata(metadata, {});
 		return res[0];
 	}
 
 	makePublic(path: string) {
-		return this.getBucket().file(path).makePublic();
+		return this.getBucket().file(GCSFilesystem.sanitizePath(path)).makePublic();
 	}
 
 	getPublicUrl(path: string) {
-		return `https://${this.config.storageBucket}.storage.googleapis.com/${path}`;
+		return `https://${this.config.storageBucket}.storage.googleapis.com/${GCSFilesystem.sanitizePath(path)}`;
 	}
 
 	getBucketName() {
@@ -134,6 +134,13 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 
 	private getBucket() {
 		return this.storage.bucket(this.config.storageBucket);
+	}
+
+	private static sanitizePath(path: string) {
+		if (path.startsWith('/')) {
+			return path.substring(1);
+		}
+		return path;
 	}
 
 	/**@deprecated Use FirebaseUtils instead*/

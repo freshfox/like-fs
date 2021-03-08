@@ -1,5 +1,5 @@
 import {GCSFilesystem} from '../lib/gcs_filesystem';
-import {randomString} from 'like-fs';
+import {awaitWriteFinish, randomString, TmpFilesystem, writeToStream} from 'like-fs';
 import {createFilesystemTestSuite} from 'like-fs/dist/test';
 import {loadEnv} from './index';
 import should from 'should';
@@ -13,6 +13,7 @@ describe('GCSFilesystem', function () {
 		storageBucket: process.env.STORAGE_BUCKET,
 	});
 	const testDir = randomString();
+	const tmpFs = new TmpFilesystem({});
 
 	createFilesystemTestSuite(testDir, fs);
 
@@ -21,6 +22,14 @@ describe('GCSFilesystem', function () {
 		date.setDate(date.getDate() + days);
 		return date;
 	};
+
+	it('should write and read a file starting with a /', async () => {
+		const file = `/${testDir}/text.txt`;
+		await fs.writeStreamToFile(file, writeToStream('test'));
+		await tmpFs.writeStreamToFile('text.txt', fs.createReadStream(file));
+		const data = await tmpFs.readFile('text.txt', 'utf8');
+		data.should.eql('test');
+	});
 
 	describe('#getDownloadUrl()', () => {
 

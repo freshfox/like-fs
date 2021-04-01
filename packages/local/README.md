@@ -125,7 +125,7 @@ This package includes an interface `IOnlineFilesystem` which can be used
 to implement filesystems for different cloud storage providers.
 
 Current implementations are
- - [node-fs-firebase](https://github.com/freshfox/node-fs-firebase) for Firebase and Google Cloud Storage
+ - [like-fs-gcs](https://github.com/freshfox/like-fs/tree/master/packages/gcs) for Firebase and Google Cloud Storage
 
 The interface `IOnlineFilesystem` exposes the same API as the local filesystems
 with two additional functions `getDownloadUrl()` and `getUploadUrl()`.

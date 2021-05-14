@@ -1,5 +1,5 @@
 import * as stream from 'stream';
-import {GetSignedUrlConfig, Storage, StorageOptions} from '@google-cloud/storage';
+import {CreateWriteStreamOptions, GetSignedUrlConfig, Storage, StorageOptions} from '@google-cloud/storage';
 import {awaitWriteFinish, GetUrlOptions, IOnlineFilesystem, Stats} from 'like-fs';
 import {inject, injectable} from "./di";
 import {FirebaseUtils} from "./utils";
@@ -33,7 +33,7 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 				@inject(GCStorageConfig) private readonly config: IGCStorageConfig) {
 	}
 
-	createWriteStream(file: string, opts?: any): stream.Writable {
+	createWriteStream(file: string, opts?: CreateWriteStreamOptions): stream.Writable {
 		return this.getBucket().file(GCSFilesystem.sanitizePath(file)).createWriteStream({
 			...opts,
 			resumable: false,
@@ -65,7 +65,7 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 		return this.getBucket().file(GCSFilesystem.sanitizePath(path)).delete();
 	}
 
-	writeStreamToFile(path: string, stream: stream.Readable, options?: any): Promise<any> {
+	writeStreamToFile(path: string, stream: stream.Readable, options?: CreateWriteStreamOptions): Promise<any> {
 		const writeStream = this.createWriteStream(path, options);
 		stream.pipe(writeStream);
 		return awaitWriteFinish(writeStream);

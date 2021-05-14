@@ -1,6 +1,6 @@
 {
   "name": "like-fs-gcs",
-  "version": "5.2.2",
+  "version": "5.2.3",
   "description": "",
   "repository": "git@github.com:freshfox/like-fs.git",
   "author": "Freshfox OG",
@@ -38,7 +38,7 @@
     "@types/mocha": "^8.2.0",
     "@types/node": "10",
     "@types/uuid": "^8.3.0",
-    "like-fs": "^3.2.1",
+    "like-fs": "^3.2.2",
     "mocha": "^8.2.1",
     "node-env-file": "^0.1.8",
     "should": "^13.2.3",

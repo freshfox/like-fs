@@ -1,6 +1,6 @@
 {
   "name": "like-fs",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "description": "Typed wrapper around the fs module and providing interfaces for cloud implementations",
   "repository": "git@github.com:freshfox/like-fs.git",
   "author": "Freshfox OG",

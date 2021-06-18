@@ -1,7 +1,7 @@
 import {Readable, Writable} from 'stream';
 import crypto from 'crypto';
-import {get as getHttps} from 'https';
-import {get as getHttp, IncomingMessage, RequestOptions} from "http";
+import {get as getHttps, RequestOptions} from 'https';
+import {get as getHttp, IncomingMessage} from "http";
 
 export function awaitWriteFinish(stream: Writable): Promise<void> {
 	const state = stream['_writableState'];
@@ -43,7 +43,9 @@ export async function downloadFileFromUrl(url: string, writeStream: Writable, op
 			get = getHttps
 		}
 
-		get(url, opts || {}, (resp) => {
+		get(url, opts || {
+			...opts
+		}, (resp) => {
 			if (resp.statusCode >= 400) {
 				reject(new ResponseError(resp));
 			} else {

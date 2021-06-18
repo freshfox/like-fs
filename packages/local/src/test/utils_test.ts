@@ -26,18 +26,21 @@ describe('Utils', function () {
 
 		it('should download a file with an https url', async () => {
 
-			const url = 'https://file-examples.com/wp-content/uploads/2017/10/file-sample_150kB.pdf';
+			const url = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
 			const fs = new TmpFilesystem({});
 
 			const target =`sample-file-1-${Date.now()}.pdf`;
-			await downloadFileFromUrl(url, fs.createWriteStream(target));
+			await downloadFileFromUrl(url, fs.createWriteStream(target), {
+				maxHeaderSize: 8000
+			} as any);
 			await should(fs.exists(target)).resolvedWith(true)
 
 		});
 
 		it('should download a file with an http url', async () => {
 
-			const url = 'http://file-examples.com/wp-content/uploads/2017/10/file-sample_150kB.pdf';
+			// noinspection HttpUrlsUsage
+			const url = 'http://www.africau.edu/images/default/sample.pdf';
 			const fs = new TmpFilesystem({});
 			const target =`sample-file-2-${Date.now()}.pdf`;
 			await downloadFileFromUrl(url, fs.createWriteStream(target));

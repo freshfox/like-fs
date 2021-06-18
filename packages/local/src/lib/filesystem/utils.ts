@@ -43,9 +43,7 @@ export async function downloadFileFromUrl(url: string, writeStream: Writable, op
 			get = getHttps
 		}
 
-		get(url, opts || {
-			...opts
-		}, (resp) => {
+		get(url, opts || {}, (resp) => {
 			if (resp.statusCode >= 400) {
 				reject(new ResponseError(resp));
 			} else {

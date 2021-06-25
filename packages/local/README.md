@@ -68,51 +68,51 @@ $ yarn add like-fs
 ### LocalFilesystem
 
 #### .createWriteStream(path: string, opts?: any): Writable;
-Returns a WriteStream from the standard `fs` module.
+> Returns a WriteStream from the standard `fs` module.
 See [fs.createWriteStream()](https://nodejs.org/api/fs.html#fs_fs_createwritestream_path_options)
 for more details
 
 #### .createReadStream(path: string, opts?: any): Readable;
-Returns a ReadStream from the standard `fs` module.
+> Returns a ReadStream from the standard `fs` module.
 See [fs.createReadStream()](https://nodejs.org/api/fs.html#fs_fs_createreadstream_path_options)
 for more details
 
 #### .readFile(path: string, encoding?: string): Promise<string|Buffer>;
-Reads the file with the given encoding. If encoding is `utf8`
+> Reads the file with the given encoding. If encoding is `utf8`
 The return value will be a string, otherwise it'll be a `Buffer`
 
 #### .exists(path: string): Promise<boolean>;
-Returns `true` if the file exists, otherwise will return `false`
+> Returns `true` if the file exists, otherwise will return `false`
 
 #### .writeStreamToFile(path: string, stream: Readable, options?): Promise<any>;
-This is a helper function to asynchronously write a given ReadStream
+> This is a helper function to asynchronously write a given ReadStream
 to a file. The `Promise` resolves once the write finishes.
 
 ### .writeDataToFile(path: string, data: any, options?: any)
-Works exactly like [fs.writeFile()](https://nodejs.org/api/fs.html#fs_fs_writefile_file_data_options_callback)
+> Works exactly like [fs.writeFile()](https://nodejs.org/api/fs.html#fs_fs_writefile_file_data_options_callback)
 
 #### .unlink(path: string): Promise<any>;
-Deletes the given file if it exists
+> Deletes the given file if it exists
 
 #### .mkdir(path: string): Promise<void>;
-Creates a directory structure like `mkdir -p`. You only need this
+> Creates a directory structure like `mkdir -p`. You only need this
 when you want to create a directory without writing a file. All methods
 which write files will automatically create the required directory
 structure beforehand.
 
 #### .readDir(path: string): Promise<string[]>
-Returns a string array of paths of the containing files and directories
+> Returns a string array of paths of the containing files and directories
 All paths are relative to the given path.
 
 #### .lstat(path: string): Promise<Stats>
-Returns the size of a file
+> Returns the size of a file
 
 #### .dirSize(directory: string): Promise<number>
-Recursively calculates the sizes of all files and directories below
+> Recursively calculates the sizes of all files and directories below
 the given path and returns the number in bytes
 
 #### .touch(path: string): Promise<void>
-Creates an empty file at the given path
+> Creates an empty file at the given path
 
 ### TmpFilesystem
 

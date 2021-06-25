@@ -27,5 +27,19 @@ export interface IFilesystem {
 }
 
 export interface Stats {
+	/**
+	 * File size in bytes
+	 */
 	size: number
+
+	/**
+	 * Date when the file was modified
+	 */
+	mtime: Date;
+
+	/**
+	 * Date when the file was created
+	 */
+	birthtime: Date;
+
 }

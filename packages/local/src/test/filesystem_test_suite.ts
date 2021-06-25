@@ -84,7 +84,7 @@ export function createFilesystemTestSuite(baseDirectory: string, fs: IFilesystem
 		});
 	});
 
-	describe('#stat()', () => {
+	describe('#lstat()', () => {
 		it('should get file stats', async () => {
 
 			const file = 'fixed_size_file.txt';
@@ -97,6 +97,8 @@ export function createFilesystemTestSuite(baseDirectory: string, fs: IFilesystem
 
 			const stats = await fs.lstat(createPath(file));
 			should(stats.size).eql(content.length);
+			should(stats.birthtime).instanceof(Date);
+			should(stats.mtime).instanceof(Date);
 
 		});
 	});

@@ -106,8 +106,11 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 
 	async lstat(path: string): Promise<Stats> {
 		const metadata = await this.getMetadata(GCSFilesystem.sanitizePath(path));
-		const size = parseInt(metadata.size, 10) || 0;
-		return {size};
+		return {
+			size: parseInt(metadata.size, 10) || 0,
+			birthtime: new Date(metadata.timeCreated),
+			mtime: new Date(metadata.updated)
+		};
 	}
 
 	async getMetadata(path: string): Promise<GCFileMetaData> {

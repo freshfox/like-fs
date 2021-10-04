@@ -90,6 +90,7 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 			contentType: 'video/mp4',
 			action: 'write',
 			expires: validUntil,
+			...opts
 		});
 		return resp[0];
 	}

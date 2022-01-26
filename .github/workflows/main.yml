@@ -4,6 +4,8 @@ on: [push]
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    env:
+      GOOGLE_APPLICATION_CREDENTIALS: '/tmp/google-credentials-sa-node-${{ matrix.node }}-${{ matrix.package }}.json'
     strategy:
       matrix:
         package: [ local, gcs ]

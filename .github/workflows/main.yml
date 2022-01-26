@@ -38,5 +38,4 @@ jobs:
       - name: Test package
         run: |
           cd packages/${{ matrix.package }}
-          echo $STORAGE_BUCKET
           yarn test

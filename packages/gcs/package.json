@@ -21,6 +21,7 @@
   },
   "scripts": {
     "test": "NODE_ENV=test mocha -r ts-node/register src/test/**/*.ts",
+    "test:prepare": "./scripts/prepare",
     "clean": "rm -rf dist tsconfig.tsbuildinfo",
     "build": "yarn clean && tsc --build"
   },

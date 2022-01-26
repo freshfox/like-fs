@@ -120,8 +120,8 @@ describe('Dependency Injection', function () {
 
 			const container = new Container();
 			container.bind(GCSFilesystem).toSelf().inSingletonScope();
-			container.bind(GCStorage).toConstantValue(null);
-			container.bind(GCStorageConfig).toConstantValue(null);
+			container.bind(GCStorage).toConstantValue({});
+			container.bind(GCStorageConfig).toConstantValue({});
 
 			const fs = container.get(GCSFilesystem);
 			fs.should.instanceOf(GCSFilesystem);

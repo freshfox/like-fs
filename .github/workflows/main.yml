@@ -17,15 +17,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node }}
-      # Initialize root cache
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        id: modules-cache
-        with:
-          path: 'packages/${{ matrix.package }}/node_modules'
-          key: ${{ runner.os }}-node-modules-${{ matrix.package }}-${{ matrix.node }}-${{ hashFiles('yarn.lock') }}
       - name: Install dependencies
-        if: steps.modules-cache.outputs.cache-hit != 'true'
         run: yarn lerna bootstrap
       - name: Build package
         run: cd packages/${{ matrix.package }} && yarn build

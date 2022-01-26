@@ -2,8 +2,6 @@
 > A thin abstraction layer for accessing local and cloud filesystems with an API like-fs
 
 [![npm version](https://badge.fury.io/js/like-fs.svg)](https://badge.fury.io/js/like-fs)
-[![Dependencies](https://david-dm.org/freshfox/like-fs.svg)](https://david-dm.org/freshfox/like-fs#info=dependencies)
-[![img](https://david-dm.org/freshfox/like-fs/dev-status.svg)](https://david-dm.org/freshfox/like-fs/#info=devDependencies)
 [![Known Vulnerabilities](https://snyk.io/test/github/freshfox/like-fs/badge.svg)](https://snyk.io/test/github/freshfox/like-fs)
 
 ## Table of Contents

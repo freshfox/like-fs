@@ -22,7 +22,7 @@ jobs:
           key: ${{ runner.os }}-node-modules-${{ matrix.package }}-${{ matrix.node }}-${{ hashFiles('yarn.lock') }}
       - name: Install dependencies
         if: steps.modules-cache.outputs.cache-hit != 'true'
-        run: yarn install
+        run: yarn lerna bootstrap
       - name: Build package
         run: cd packages/${{ matrix.package }} && yarn build
       - name: Prepare tests

@@ -8,6 +8,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
+    "lerna": "lerna",
     "test": "lerna run --stream test",
     "build": "lerna run --stream build",
     "release": "yarn build && yarn test && lerna publish"

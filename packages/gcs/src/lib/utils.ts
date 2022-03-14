@@ -26,4 +26,9 @@ export class FirebaseUtils {
 		return url;
 	}
 
+	static async readToken(fs: IOnlineFilesystem, path: string): Promise<string | null> {
+		const meta = await fs.getMetadata(path);
+		return meta.metadata?.firebaseStorageDownloadTokens || null;
+	}
+
 }

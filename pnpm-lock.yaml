@@ -6,9 +6,11 @@ importers:
     specifiers:
       firebase-tools: ^11.30.0
       lerna: ^3.22.1
+      prettier: ^2.8.8
     devDependencies:
       firebase-tools: 11.30.0
       lerna: 3.22.1
+      prettier: 2.8.8
 
   packages/gcs:
     specifiers:
@@ -7246,6 +7248,12 @@ packages:
   /prelude-ls/1.1.2:
     resolution: {integrity: sha512-ESF23V4SKG6lVSGZgYNpbsiaAkdab6ZgOxe52p7+Kid3W3u3bxR4Vfd/o21dmN7jSt0IwgZ4v5MUd26FEtXE9w==}
     engines: {node: '>= 0.8.0'}
+    dev: true
+
+  /prettier/2.8.8:
+    resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
     dev: true
 
   /process-nextick-args/2.0.1:

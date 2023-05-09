@@ -133,7 +133,7 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 	}
 
 	getPublicUrl(path: string) {
-		return `https://${this.config.storageBucket}.storage.googleapis.com/${GCSFilesystem.sanitizePath(path)}`;
+		return `https://${this.getBucket()}.storage.googleapis.com/${GCSFilesystem.sanitizePath(path)}`;
 	}
 
 	getBucketName() {

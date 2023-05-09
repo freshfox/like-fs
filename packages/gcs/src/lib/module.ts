@@ -1,115 +1,55 @@
-import {DynamicModule, FactoryProvider, ModuleMetadata, Provider, Type} from "@nestjs/common";
-import {GCSFilesystem, GCStorage, GCStorageConfig, IGCStorageConfig} from "./gcs_filesystem";
-import {Storage} from "@google-cloud/storage";
+import { DynamicModule, FactoryProvider, ModuleMetadata, Type } from '@nestjs/common';
+import { GCSFilesystem, GCStorage, GCStorageConfig, IGCStorageConfig } from './gcs_filesystem';
+import type { Storage as GCPStorage } from '@google-cloud/storage';
+import type { Storage as FirebaseStorage } from 'firebase-admin/storage';
+import { ClassProvider, ExistingProvider, ValueProvider } from '@nestjs/common/interfaces/modules/provider.interface';
 
 export class GCSFilesystemModule {
-
-	static forRoot(config: IGCStorageConfig): DynamicModule {
+	static forRoot(storage: GCPStorage | FirebaseStorage, config: IGCStorageConfig): DynamicModule {
 		return {
 			module: GCSFilesystemModule,
 			providers: [
 				GCSFilesystem,
 				{
 					provide: GCStorageConfig,
-					useValue: config
+					useValue: config,
 				},
 				{
 					provide: GCStorage,
-					useValue: new Storage(config.storageOptions)
-				}
+					useValue: storage,
+				},
 			],
-			exports: [
-				GCSFilesystem
-			],
-		}
+			exports: [GCSFilesystem],
+		};
 	}
 
-	static forRootAsync(options: GCSFilesystemModuleAsyncOptions): DynamicModule{
+	static forRootAsync(options: GCSFilesystemModuleOptions): DynamicModule {
 		return {
 			imports: options.imports || [],
 			module: GCSFilesystemModule,
 			providers: [
 				GCSFilesystem,
-				{
-					provide: GCStorage,
-					useFactory: (config: IGCStorageConfig) => {
-						return new Storage(config.storageOptions);
-					},
-					inject: [GCStorageConfig]
-				},
-				...this.createConnectProviders(options)
+				provide(GCStorage, options.storageProvider),
+				provide(GCStorageConfig, options.configProvider),
 			],
-			exports: [
-				GCSFilesystem
-			],
-		};
-	}
-
-	private static createConnectProviders(
-		options: GCSFilesystemModuleAsyncOptions,
-	): Provider[] {
-		if (options.useExisting || options.useFactory) {
-			return [this.createConnectOptionsProvider(options)];
-		}
-
-		// for useClass
-		return [
-			this.createConnectOptionsProvider(options),
-			{
-				provide: options.useClass,
-				useClass: options.useClass,
-			},
-		];
-	}
-
-	private static createConnectOptionsProvider(
-		options: GCSFilesystemModuleAsyncOptions,
-	): Provider {
-		if (options.useFactory) {
-
-			// for useFactory
-			return {
-				provide: GCStorageConfig,
-				useFactory: options.useFactory,
-				inject: options.inject || [],
-			};
-		}
-
-		// For useExisting...
-		return {
-			provide: GCStorageConfig,
-			useFactory: async (optionsFactory: GCSFilesystemOptionsFactory) =>
-				await optionsFactory.createGCSFilesystemOptions(),
-			inject: [options.useExisting || options.useClass],
+			exports: [GCSFilesystem],
 		};
 	}
 }
 
-export interface GCSFilesystemOptionsFactory {
-	createGCSFilesystemOptions(): Promise<IGCStorageConfig> | IGCStorageConfig;
+export type Provider<T> = ClassProvider<T> | ValueProvider<T> | FactoryProvider<T> | ExistingProvider<T>;
+
+export type ExternalProvider<T> = Omit<Provider<T>, 'provide'>;
+
+function provide<T>(p: Provider<T>['provide'], external: ExternalProvider<T>): Provider<T> {
+	return {
+		provide: p,
+		...external,
+	} as Provider<T>;
 }
 
-export interface GCSFilesystemModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
-
-	/**
-	 * Existing Provider to be used.
-	 */
-	useExisting?: Type<GCSFilesystemOptionsFactory>;
-
-	/**
-	 * Type (class name) of provider (instance to be registered and injected).
-	 */
-	useClass?: Type<GCSFilesystemOptionsFactory>;
-
-	/**
-	 * Factory function that returns an instance of the provider to be injected.
-	 */
-	useFactory?: (
-		...args: any[]
-	) => Promise<IGCStorageConfig> | IGCStorageConfig;
-
-	/**
-	 * Optional list of providers to be injected into the context of the Factory function.
-	 */
-	inject?: FactoryProvider['inject'];
+export interface GCSFilesystemModuleOptions {
+	imports: ModuleMetadata['imports'];
+	storageProvider: ExternalProvider<GCPStorage | FirebaseStorage>;
+	configProvider: ExternalProvider<IGCStorageConfig>;
 }

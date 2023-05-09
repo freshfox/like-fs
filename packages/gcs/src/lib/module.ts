@@ -1,21 +1,16 @@
-import { DynamicModule, FactoryProvider, ModuleMetadata, Type } from '@nestjs/common';
-import { GCSFilesystem, GCStorage, GCStorageConfig, IGCStorageConfig } from './gcs_filesystem';
-import type { Storage as GCPStorage } from '@google-cloud/storage';
-import type { Storage as FirebaseStorage } from 'firebase-admin/storage';
+import { DynamicModule, FactoryProvider, ModuleMetadata } from '@nestjs/common';
+import { GCSFilesystem, LikeFsBucket } from './gcs_filesystem';
+import type { Bucket } from '@google-cloud/storage';
 import { ClassProvider, ExistingProvider, ValueProvider } from '@nestjs/common/interfaces/modules/provider.interface';
 
 export class GCSFilesystemModule {
-	static forRoot(storage: GCPStorage | FirebaseStorage, config: IGCStorageConfig): DynamicModule {
+	static forRoot(storage: Bucket): DynamicModule {
 		return {
 			module: GCSFilesystemModule,
 			providers: [
 				GCSFilesystem,
 				{
-					provide: GCStorageConfig,
-					useValue: config,
-				},
-				{
-					provide: GCStorage,
+					provide: LikeFsBucket,
 					useValue: storage,
 				},
 			],
@@ -27,11 +22,7 @@ export class GCSFilesystemModule {
 		return {
 			imports: options.imports || [],
 			module: GCSFilesystemModule,
-			providers: [
-				GCSFilesystem,
-				provide(GCStorage, options.storageProvider),
-				provide(GCStorageConfig, options.configProvider),
-			],
+			providers: [GCSFilesystem, provide(LikeFsBucket, options.bucketProvider)],
 			exports: [GCSFilesystem],
 		};
 	}
@@ -50,6 +41,5 @@ function provide<T>(p: Provider<T>['provide'], external: ExternalProvider<T>): P
 
 export interface GCSFilesystemModuleOptions {
 	imports: ModuleMetadata['imports'];
-	storageProvider: ExternalProvider<GCPStorage | FirebaseStorage>;
-	configProvider: ExternalProvider<IGCStorageConfig>;
+	bucketProvider: ExternalProvider<Bucket>;
 }

@@ -1,17 +1,14 @@
 import { Module, Provider } from '@nestjs/common';
-import { GCSFilesystem, GCStorage, IGCStorageConfig } from '../lib';
+import { GCSFilesystem, LikeFsBucket, GCSFilesystemModule } from '../lib';
 import { Test } from '@nestjs/testing';
+import { Bucket, Storage } from '@google-cloud/storage';
 import 'should';
-import { GCSFilesystemModule } from '../lib/module';
-import { Storage } from '@google-cloud/storage';
 
 describe('Dependency Injection', function () {
 	describe('NestJS', function () {
 		describe('Static', function () {
 			it('should get a GCS fs instance', async () => {
-				const module = GCSFilesystemModule.forRoot(new Storage(), {
-					storageBucket: 'my-test-bucket',
-				});
+				const module = GCSFilesystemModule.forRoot(new Storage().bucket('my-test-bucket'));
 
 				@Module({
 					imports: [module],
@@ -27,13 +24,17 @@ describe('Dependency Injection', function () {
 				const fs = moduleRef.get(GCSFilesystem);
 				fs.should.instanceOf(GCSFilesystem);
 
-				const storage = moduleRef.get(GCStorage);
-				storage.should.instanceOf(Storage);
+				const storage = moduleRef.get(LikeFsBucket);
+				storage.should.instanceOf(Bucket);
 			});
 		});
 
 		it('should configure GCSFilesystemModule asynchronously via useFactory, import and external dependency ', async () => {
 			const GCS_CONFIG = 'GCS_CONFIG';
+			interface IGCStorageConfig {
+				storageBucket: string;
+			}
+
 			const config: IGCStorageConfig = {
 				storageBucket: 'bucket',
 			};
@@ -53,12 +54,9 @@ describe('Dependency Injection', function () {
 				imports: [
 					GCSFilesystemModule.forRootAsync({
 						imports: [ConfigModule],
-						storageProvider: {
-							useValue: new Storage(),
-						},
-						configProvider: {
+						bucketProvider: {
 							useFactory: (config: IGCStorageConfig) => {
-								return config;
+								return new Storage().bucket(config.storageBucket);
 							},
 							inject: [GCS_CONFIG],
 						},
@@ -75,8 +73,8 @@ describe('Dependency Injection', function () {
 			const fs = moduleRef.get(GCSFilesystem);
 			fs.should.instanceOf(GCSFilesystem);
 
-			const storage = moduleRef.get(GCStorage);
-			storage.should.instanceOf(Storage);
+			const storage = moduleRef.get(LikeFsBucket);
+			storage.should.instanceOf(Bucket);
 		});
 	});
 });

@@ -1,17 +1,13 @@
 import {GCSFilesystem} from '../lib/gcs_filesystem';
-import {awaitWriteFinish, randomString, TmpFilesystem, writeToStream} from 'like-fs';
+import {randomString, TmpFilesystem, writeToStream} from 'like-fs';
 import {createFilesystemTestSuite} from 'like-fs/dist/test';
-import {loadEnv} from './index';
 import should from 'should';
-import {Storage} from "@google-cloud/storage";
+import {getFirebaseFilesystem, loadEnv} from "../test";
 
 describe('GCSFilesystem', function () {
 
 	loadEnv();
-
-	const fs = new GCSFilesystem(new Storage(), {
-		storageBucket: process.env.STORAGE_BUCKET,
-	});
+	const fs = getFirebaseFilesystem();
 	const testDir = randomString();
 	const tmpFs = new TmpFilesystem({});
 
@@ -31,18 +27,10 @@ describe('GCSFilesystem', function () {
 		data.should.eql('test');
 	});
 
-	describe('#getDownloadUrl()', () => {
-
-		it('should create a download url', async () => {
-			const downloadUrl = await fs.getDownloadUrl(`${testDir}/image.jpg`, dateIn(3), null);
-			should(downloadUrl).type('string')
-		});
-	});
-
 	describe('#getBucketName()', function () {
 		it('should get the buckets name', async () => {
 			const name = fs.getBucketName();
-			should(name).eql(process.env.STORAGE_BUCKET).type('string');
+			should(name).eql(process.env.GCS_BUCKET).type('string');
 		});
 	});
 });

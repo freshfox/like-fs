@@ -1,6 +1,5 @@
 import 'reflect-metadata';
 import fs from 'fs';
-import {injectable} from 'inversify';
 import mkdirp from 'mkdirp';
 import path from 'path';
 import {IFilesystem} from './filesystem';
@@ -19,7 +18,7 @@ function handleCallback(resolve, reject) {
 	}
 }
 
-@injectable() @Injectable()
+@Injectable()
 export class LocalFilesystem implements IFilesystem {
 
 	exists(path: string): Promise<boolean> {

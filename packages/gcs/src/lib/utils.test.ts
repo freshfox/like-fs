@@ -1,17 +1,30 @@
-import {loadEnv} from "./index";
-import {GCSFilesystem} from "../lib";
-import {Storage} from "@google-cloud/storage";
+import {FirebaseStorageUtils} from "../lib";
 import {awaitWriteFinish, randomString} from "like-fs";
 import 'should';
+import {getFirebaseFilesystem, getGCPFilesystem, loadEnv} from "../test";
 
 describe('Utils', function () {
 
 	loadEnv();
-
-	const fs = new GCSFilesystem(new Storage(), {
-		storageBucket: process.env.STORAGE_BUCKET,
-	});
+	const fs = getFirebaseFilesystem();
 	const testDir = randomString();
+
+	describe('#FirebaseStorageUtils', function () {
+
+		it('should get api endpoint with a GCP Storage', async () => {
+			const fs = getGCPFilesystem();
+			const result = FirebaseStorageUtils.generateTokenAndUrl(fs, 'test.jpg');
+			result.url.should.type('string').startWith('http');
+			result.token.should.type('string');
+		});
+
+		it('should generate a url with a Firebase Storage', async () => {
+			const result = FirebaseStorageUtils.generateTokenAndUrl(fs, 'test.jpg');
+			result.url.should.type('string').startWith('http');
+			result.token.should.type('string');
+		});
+
+	})
 
 	describe('#awaitWriteFinish()', function () {
 

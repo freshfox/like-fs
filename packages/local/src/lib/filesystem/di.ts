@@ -1,13 +1,12 @@
 import {
 	ClassProvider,
-	DynamicModule,
+	DynamicModule, ExistingProvider,
 	FactoryProvider,
 	ModuleMetadata,
 	Provider,
 	Type,
-	ValueProvider
+	ValueProvider,
 } from "@nestjs/common";
-import {ExistingProvider} from "@nestjs/common/interfaces/modules/provider.interface";
 
 export class DynamicModuleBuilder {
 

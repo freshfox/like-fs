@@ -1,8 +1,13 @@
 import * as stream from 'stream';
-import {CreateWriteStreamOptions, GetSignedUrlConfig, Storage, StorageOptions} from '@google-cloud/storage';
+import type {
+	CreateWriteStreamOptions,
+	GetSignedUrlConfig,
+	Storage as GCPStorage,
+	StorageOptions
+} from '@google-cloud/storage';
+import type {Storage as FirebaseStorage} from 'firebase-admin/storage';
 import {awaitWriteFinish, GetUrlOptions, IOnlineFilesystem, Stats} from 'like-fs';
-import {inject, injectable} from "./di";
-import {FirebaseUtils} from "./utils";
+import {Inject, Injectable} from "@nestjs/common";
 
 export interface GCFileMetaData {
 	kind?: string,
@@ -26,11 +31,11 @@ export interface IGCStorageConfig {
 	storageOptions?: StorageOptions;
 }
 
-@injectable()
+@Injectable()
 export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 
-	constructor(@inject(GCStorage) private readonly storage: Storage,
-				@inject(GCStorageConfig) private readonly config: IGCStorageConfig) {
+	constructor(@Inject(GCStorage) private readonly storage: GCPStorage | FirebaseStorage,
+				@Inject(GCStorageConfig) private readonly config: IGCStorageConfig) {
 	}
 
 	createWriteStream(file: string, opts?: CreateWriteStreamOptions): stream.Writable {
@@ -87,7 +92,6 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 		opts = opts || {};
 		const resp = await this.getBucket().file(GCSFilesystem.sanitizePath(path)).getSignedUrl(<GetSignedUrlConfig>{
 			version: 'v4',
-			contentType: 'video/mp4',
 			action: 'write',
 			expires: validUntil,
 			...opts
@@ -136,6 +140,15 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 		return this.config.storageBucket;
 	}
 
+	getApiEndpoint(): string {
+		const apiEndpoint = (this.storage as GCPStorage).apiEndpoint || ((this.storage as any).storageClient as GCPStorage)?.apiEndpoint;
+		if (apiEndpoint) {
+			return apiEndpoint;
+		}
+		console.error(this.storage)
+		throw new Error('Unable to get api endpoint from storage implementation');
+	}
+
 	private getBucket() {
 		return this.storage.bucket(this.config.storageBucket);
 	}
@@ -145,15 +158,5 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 			return path.substring(1);
 		}
 		return path;
-	}
-
-	/**@deprecated Use FirebaseUtils instead*/
-	static createUrl(bucket: string, path: string, token: string){
-		return FirebaseUtils.createUrl(bucket, path, token);
-	}
-
-	/**@deprecated Use FirebaseUtils instead*/
-	static generateTokenAndUrl(bucket: string, path: string) {
-		return FirebaseUtils.generateTokenAndUrl(bucket, path);
 	}
 }

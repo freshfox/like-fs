@@ -1,31 +1,31 @@
 {
-  "name": "like-fs",
-  "version": "3.5.2",
-  "description": "Typed wrapper around the fs module and providing interfaces for cloud implementations",
-  "repository": "git@github.com:freshfox/like-fs.git",
-  "author": "Freshfox OG",
-  "license": "MIT",
-  "private": false,
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist/",
-    "README.md"
-  ],
-  "engines": {
-    "node": ">=16"
-  },
-  "scripts": {
-    "test": "NODE_ENV=test mocha -r ts-node/register src/**/*.test.ts",
-    "build": "yarn clean && tsc --build",
-    "clean": "rm -rf dist tsconfig.tsbuildinfo"
-  },
-  "devDependencies": {
-    "@types/mocha": "^9.1.0",
-    "@types/node": "16.18.36",
-    "mocha": "^9.2.0",
-    "should": "^13.2.3",
-    "ts-node": "^10.4.0",
-    "typescript": "^4.5.5"
-  }
+	"name": "like-fs",
+	"version": "4.0.0",
+	"description": "Typed wrapper around the fs module and providing interfaces for cloud implementations",
+	"repository": "git@github.com:freshfox/like-fs.git",
+	"author": "Freshfox OG",
+	"license": "MIT",
+	"private": false,
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"files": [
+		"dist/",
+		"README.md"
+	],
+	"engines": {
+		"node": ">=16"
+	},
+	"scripts": {
+		"test": "NODE_ENV=test mocha -r ts-node/register src/**/*.test.ts",
+		"build": "yarn clean && tsc --build",
+		"clean": "rm -rf dist tsconfig.tsbuildinfo"
+	},
+	"devDependencies": {
+		"@types/mocha": "^9.1.0",
+		"@types/node": "16.18.36",
+		"mocha": "^9.2.0",
+		"should": "^13.2.3",
+		"ts-node": "^10.4.0",
+		"typescript": "^4.5.5"
+	}
 }

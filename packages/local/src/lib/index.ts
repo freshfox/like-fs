@@ -1,7 +1,5 @@
-export * from './filesystem/filesystem';
-export * from './filesystem/local_file_system';
-export * from './filesystem/module';
-export * from './filesystem/online_filesystem';
-export * from './filesystem/tmp_file_system';
-export * from './filesystem/utils';
-
+export * from './filesystem';
+export * from './local-filesystem';
+export * from './online-filesystem';
+export * from './tmp-filesystem';
+export * from './utils';

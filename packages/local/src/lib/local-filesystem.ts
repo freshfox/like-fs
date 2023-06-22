@@ -1,9 +1,8 @@
 import 'reflect-metadata';
-import fs, { createReadStream, createWriteStream } from 'fs';
 import path from 'path';
 import { IFilesystem } from './filesystem';
 import stream from 'stream';
-import { Stats, promises as fsPromise, mkdirSync, existsSync } from 'fs';
+import fs, { Stats, mkdirSync, existsSync, createReadStream, createWriteStream, utimes } from 'fs';
 import { lstat, mkdir, open, readdir, readFile, rm, unlink, writeFile } from 'fs/promises';
 
 export class LocalFilesystem implements IFilesystem {
@@ -110,7 +109,7 @@ export class LocalFilesystem implements IFilesystem {
 		const absPath = this.getPath(path);
 		return new Promise<void>((resolve, reject) => {
 			const ts = Date.now();
-			fs.utimes(absPath, ts, ts, (err) => {
+			utimes(absPath, ts, ts, (err) => {
 				if (err) {
 					fs.open(absPath, 'w', (err, fd) => {
 						if (err) {

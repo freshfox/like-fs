@@ -1,10 +1,8 @@
-import { LocalFilesystem } from './local_file_system';
 import { join } from 'path';
 import { randomString } from './utils';
-import { Injectable } from '@nestjs/common';
 import { tmpdir } from 'os';
+import { LocalFilesystem } from './local-filesystem';
 
-@Injectable()
 export class TmpFilesystem extends LocalFilesystem {
 	private readonly directory: string;
 

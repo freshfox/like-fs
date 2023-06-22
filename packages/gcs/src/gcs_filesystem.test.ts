@@ -1,15 +1,12 @@
-import {GCSFilesystem} from '../lib/gcs_filesystem';
-import {randomString, TmpFilesystem, writeToStream} from 'like-fs';
-import {createFilesystemTestSuite} from 'like-fs/dist/test';
+import { createFilesystemTestSuite, randomString, TmpFilesystem, writeToStream } from 'like-fs';
 import should from 'should';
-import {getFirebaseFilesystem, loadEnv} from "../test";
+import { GCSFilesystem } from './gcs_filesystem';
+import { getFirebaseFilesystem } from './test-utils';
 
 describe('GCSFilesystem', function () {
-
-	loadEnv();
 	const fs = getFirebaseFilesystem();
 	const testDir = randomString();
-	const tmpFs = new TmpFilesystem({});
+	const tmpFs = new TmpFilesystem();
 
 	createFilesystemTestSuite(testDir, fs);
 

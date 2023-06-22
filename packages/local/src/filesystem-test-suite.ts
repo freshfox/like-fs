@@ -1,11 +1,10 @@
 import * as path from 'path';
-import {IFilesystem} from "../lib/filesystem/filesystem";
-import {awaitWriteFinish} from "../lib/filesystem/utils";
+import { IFilesystem } from './filesystem';
+import { awaitWriteFinish } from './utils';
 
 export function createFilesystemTestSuite(baseDirectory: string, fs: IFilesystem) {
-
 	const should = require('should');
-	function createPath(...paths) {
+	function createPath(...paths: string[]) {
 		return path.join(baseDirectory, ...paths);
 	}
 
@@ -63,7 +62,6 @@ export function createFilesystemTestSuite(baseDirectory: string, fs: IFilesystem
 
 	describe('#readDir', () => {
 		it('should list files in a directory', async () => {
-
 			const dir = `dir_${Date.now()}`;
 			const files = ['test_1.txt', 'test_2.txt', 'test_3.txt'];
 
@@ -78,7 +76,7 @@ export function createFilesystemTestSuite(baseDirectory: string, fs: IFilesystem
 			should(readFiles).eql(files);
 		});
 
-		it('should not throw an error if directory doesn\'t exist', async () => {
+		it("should not throw an error if directory doesn't exist", async () => {
 			const files = await fs.readDir(createPath(`some_dir_${Date.now()}`));
 			should(files).length(0);
 		});
@@ -86,7 +84,6 @@ export function createFilesystemTestSuite(baseDirectory: string, fs: IFilesystem
 
 	describe('#lstat()', () => {
 		it('should get file stats', async () => {
-
 			const file = 'fixed_size_file.txt';
 			const content = 'The content of this file should not change';
 
@@ -99,13 +96,12 @@ export function createFilesystemTestSuite(baseDirectory: string, fs: IFilesystem
 			should(stats.size).eql(content.length);
 			should(stats.birthtime).instanceof(Date);
 			should(stats.mtime).instanceof(Date);
-
 		});
 	});
 }
 
 function wait(ms: number) {
 	return new Promise((resolve) => {
-		setTimeout(resolve, ms)
+		setTimeout(resolve, ms);
 	});
 }

@@ -1,19 +1,17 @@
-import {TmpFilesystem} from "../lib/filesystem/tmp_file_system";
-import {randomString} from "../lib/filesystem/utils";
-import {createFilesystemTestSuite} from "./filesystem_test_suite";
 import should from 'should';
+import { createFilesystemTestSuite } from './filesystem-test-suite';
+import { TmpFilesystem } from './tmp-filesystem';
+import { randomString } from './utils';
 
 describe('TmpFilesystem', () => {
-
 	const fs = new TmpFilesystem({
-		tmpDirectory: `/tmp/node-fs-local`
+		tmpDirectory: `node-fs-local`,
 	});
 
 	createFilesystemTestSuite(randomString(), fs);
 
 	describe('#dirStat()', () => {
 		it('should get directory stats', async () => {
-
 			const dir = 'some-dir';
 			const subDir = `${dir}/some-sub-dir`;
 			let data = 'The content of this file should not change';
@@ -27,29 +25,23 @@ describe('TmpFilesystem', () => {
 			await fs.writeDataToFile(`${subDir}/fixed_size_file_6.txt`, data);
 			await fs.writeDataToFile(`${subDir}/fixed_size_file_7.txt`, data);
 
-			const start = Date.now();
 			const size = await fs.dirSize(dir);
 			should(size).eql(8 * data.length);
-
 		});
 	});
 
 	describe('#touch', () => {
-
 		it('should touch a file', async () => {
 			const file = 'touch-me.txt';
 			await fs.touch(file);
 			await fs.touch(file);
 			const exists = await fs.exists(file);
-			should(exists).true()
+			should(exists).true();
 		});
-
 	});
 
 	describe('#writeBuffer', function () {
-
 		it('should overwrite contents of a file at the beginning', async () => {
-
 			const file = 'overriding.txt';
 
 			const buf1 = Buffer.from('Hello world', 'utf8');
@@ -59,14 +51,11 @@ describe('TmpFilesystem', () => {
 
 			const content = await fs.readFile(file, 'utf8');
 			should(content).eql('Other world');
-
 		});
 	});
 
 	describe('#unlinkDir', function () {
-
 		it('should delete a directory with subdirectories', async () => {
-
 			const base = 'unlink-me';
 			const dir = base + '/' + randomString();
 
@@ -76,9 +65,6 @@ describe('TmpFilesystem', () => {
 
 			await fs.exists(base).should.resolvedWith(true);
 			await fs.exists(dir).should.resolvedWith(false);
-
 		});
-
 	});
-
 });

@@ -1,8 +1,7 @@
 import * as stream from 'stream';
-import type { CreateWriteStreamOptions, GetSignedUrlConfig, StorageOptions, Bucket } from '@google-cloud/storage';
+import type { CreateWriteStreamOptions, GetSignedUrlConfig, Bucket } from '@google-cloud/storage';
 import { Storage as FStorage } from 'firebase-admin/storage';
 import { awaitWriteFinish, GetUrlOptions, IOnlineFilesystem, Stats } from 'like-fs';
-import { Inject, Injectable } from '@nestjs/common';
 
 export interface GCFileMetaData {
 	kind?: string;
@@ -13,7 +12,7 @@ export interface GCFileMetaData {
 	timeCreated?: string;
 	updated?: string;
 	metadata: {
-		[key: string]: string | number;
+		[key: string]: string | number | undefined;
 		firebaseStorageDownloadTokens?: string;
 	};
 }
@@ -23,9 +22,8 @@ export const LikeFsBucket = Symbol.for('LikeFS.LikeFsBucket');
 type BucketFn = FStorage['bucket'];
 type FBucket = ReturnType<BucketFn>;
 
-@Injectable()
 export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
-	constructor(@Inject(LikeFsBucket) private readonly bucket: Bucket | FBucket) {}
+	constructor(private readonly bucket: Bucket | FBucket) {}
 
 	createWriteStream(file: string, opts?: CreateWriteStreamOptions): stream.Writable {
 		return this.bucket.file(GCSFilesystem.sanitizePath(file)).createWriteStream({
@@ -95,7 +93,7 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 		const resp = await this.bucket.file(GCSFilesystem.sanitizePath(path)).getSignedUrl({
 			action: 'read',
 			expires: dateStr,
-			contentType: options && options.contentType ? options.contentType : null,
+			contentType: options && options.contentType ? options.contentType : undefined,
 		});
 		return resp[0];
 	}
@@ -103,9 +101,9 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 	async lstat(path: string): Promise<Stats> {
 		const metadata = await this.getMetadata(GCSFilesystem.sanitizePath(path));
 		return {
-			size: parseInt(metadata.size, 10) || 0,
-			birthtime: new Date(metadata.timeCreated),
-			mtime: new Date(metadata.updated),
+			size: parseInt(metadata.size || '0', 10) || 0,
+			birthtime: new Date(metadata.timeCreated || 0),
+			mtime: new Date(metadata.updated || 0),
 		};
 	}
 

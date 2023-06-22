@@ -11,12 +11,12 @@ export class LocalFilesystem implements IFilesystem {
 	}
 
 	mkdir(path: string): Promise<any> {
-		return mkdir(this.getPath(path));
+		return mkdir(this.getPath(path), { recursive: true });
 	}
 
 	createWriteStream(file: string, opts?: Parameters<typeof createWriteStream>[1]) {
 		file = this.getPath(file);
-		mkdirSync(file, { recursive: true });
+		mkdirSync(path.dirname(file), { recursive: true });
 		return createWriteStream(file, opts);
 	}
 
@@ -79,9 +79,9 @@ export class LocalFilesystem implements IFilesystem {
 		return readdir(this.getPath(path));
 	}
 
-	ensureDirectoryExists(file: string): Promise<void> {
+	async ensureDirectoryExists(file: string): Promise<void> {
 		const dir = path.dirname(this.getPath(file));
-		return mkdir(dir);
+		await mkdir(dir, { recursive: true });
 	}
 
 	lstat(file: string): Promise<Stats> {

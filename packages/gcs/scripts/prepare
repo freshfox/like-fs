@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-set -e
-
-echo "Writing credentials to ${GOOGLE_APPLICATION_CREDENTIALS}"
-echo $GOOGLE_APPLICATION_CREDENTIALS_BASE64 | base64 -d > $GOOGLE_APPLICATION_CREDENTIALS

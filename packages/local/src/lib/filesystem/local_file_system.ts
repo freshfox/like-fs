@@ -1,75 +1,47 @@
 import 'reflect-metadata';
-import fs from 'fs';
-import mkdirp from 'mkdirp';
+import fs, { createReadStream, createWriteStream } from 'fs';
 import path from 'path';
-import {IFilesystem} from './filesystem';
-import stream from "stream";
-import {Stats, promises as fsPromise} from "fs";
-import rimraf from 'rimraf';
-import {Injectable} from "@nestjs/common";
+import { IFilesystem } from './filesystem';
+import stream from 'stream';
+import { Stats, promises as fsPromise, mkdirSync, existsSync } from 'fs';
+import { lstat, mkdir, open, readdir, readFile, rm, unlink, writeFile } from 'fs/promises';
 
-function handleCallback(resolve, reject) {
-	return (err, data) => {
-		if (err) {
-			reject(err);
-		} else {
-			resolve(data);
-		}
-	}
-}
-
-@Injectable()
 export class LocalFilesystem implements IFilesystem {
-
 	exists(path: string): Promise<boolean> {
-		return new Promise((resolve) => {
-			fs.access(this.getPath(path), (err) => {
-				resolve(!err);
-			})
-		});
+		return Promise.resolve(existsSync(this.getPath(path)));
 	}
 
 	mkdir(path: string): Promise<any> {
-		return this.ensureDirectoryExists(path);
+		return mkdir(this.getPath(path));
 	}
 
-	createWriteStream(file: string, opts?: any) {
+	createWriteStream(file: string, opts?: Parameters<typeof createWriteStream>[1]) {
 		file = this.getPath(file);
-		mkdirp.sync(path.dirname(file));
-		return fs.createWriteStream(file, opts);
+		mkdirSync(file, { recursive: true });
+		return createWriteStream(file, opts);
 	}
 
-	createReadStream(path: string, opts?: any) {
-		return fs.createReadStream(this.getPath(path), opts);
+	createReadStream(path: string, opts?: Parameters<typeof createReadStream>[1]) {
+		return createReadStream(this.getPath(path), opts);
 	}
 
-	readFile(path: string, encoding: 'utf8'): Promise<string>;
-	readFile(path: string, encoding?: string): Promise<Buffer>;
-
-	readFile(path: string, encoding?: string): Promise<string | Buffer> {
-		return new Promise((resolve, reject) => {
-			fs.readFile(this.getPath(path), encoding, (err, content) => {
-				if (err) {
-					reject(err);
-				} else {
-					resolve(content);
-				}
-			})
-		});
+	readFile(path: string, encoding: 'utf8' | 'utf-8'): Promise<string>;
+	readFile(path: string, encoding?: Parameters<typeof readFile>[1]): Promise<string | Buffer> {
+		return readFile(this.getPath(path), encoding);
 	}
 
 	async writeBuffer(file: string, flags: string, buffer: Buffer, position: number) {
 		await this.ensureDirectoryExists(file);
-		const fh = await fsPromise.open(this.getPath(file), flags);
-		await fh.write(buffer, 0, buffer.length, position)
+		const fh = await open(this.getPath(file), flags);
+		await fh.write(buffer, 0, buffer.length, position);
 		await fh.close();
 	}
 
-	writeStreamToFile(file: string, stream: stream.Readable, options?) {
+	writeStreamToFile(file: string, stream: stream.Readable, options?: Parameters<typeof createWriteStream>[1]) {
 		const absPath = this.getPath(file);
 		return new Promise(async (resolve, reject) => {
 			await this.ensureDirectoryExists(file);
-			let fileStream = fs.createWriteStream(absPath, options);
+			let fileStream = createWriteStream(absPath, options);
 			stream.pipe(fileStream);
 			stream.on('end', () => {
 				resolve(file);
@@ -78,38 +50,21 @@ export class LocalFilesystem implements IFilesystem {
 		});
 	}
 
-	async writeDataToFile(file: string, data, options?) {
-		const absPath = this.getPath(file);
+	async writeDataToFile(
+		file: string,
+		data: Parameters<typeof writeFile>[1],
+		options?: Parameters<typeof writeFile>[2]
+	) {
 		await this.ensureDirectoryExists(file);
-		return new Promise((resolve, reject) => {
-			fs.writeFile(absPath, data, options, (err) => {
-				if (err) {
-					reject(err);
-				} else {
-					resolve(absPath);
-				}
-			});
-		});
+		return writeFile(this.getPath(file), data, options);
 	}
 
 	unlink(path: string): Promise<void> {
-		return new Promise((resolve, reject) => {
-			fs.unlink(this.getPath(path), (err) => {
-				if (err) {
-					reject(err);
-				} else {
-					resolve();
-				}
-			});
-		});
+		return unlink(this.getPath(path));
 	}
 
 	unlinkDir(path: string) {
-		return new Promise((resolve, reject) => {
-			rimraf(this.getPath(path), {
-				glob: false
-			}, handleCallback(resolve, reject));
-		});
+		return rm(this.getPath(path), { recursive: true });
 	}
 
 	// noinspection JSMethodCanBeStatic
@@ -122,43 +77,26 @@ export class LocalFilesystem implements IFilesystem {
 		if (!dirExists) {
 			return [];
 		}
-		return new Promise((resolve, reject) => {
-			fs.readdir(this.getPath(path), (err, files) => {
-				if (err) {
-					reject(err);
-				} else {
-					resolve(files);
-				}
-			});
-		});
+		return readdir(this.getPath(path));
 	}
 
 	ensureDirectoryExists(file: string): Promise<void> {
 		const dir = path.dirname(this.getPath(file));
-		return mkdirp(dir);
+		return mkdir(dir);
 	}
 
 	lstat(file: string): Promise<Stats> {
-		const absPath = this.getPath(file);
-		return new Promise((resolve, reject) => {
-			fs.lstat(absPath, (err, stats) => {
-				if (err) {
-					reject(err);
-				} else {
-					resolve(stats);
-				}
-			})
-		});
+		return lstat(this.getPath(file));
 	}
 
 	async dirSize(directory: string): Promise<number> {
 		const files = await this.readDir(directory);
 		let size = 0;
 		for (const file of files) {
-			const abs = path.join(directory, file);
-			const stats = await this.lstat(abs);
+			const pathWithDirectory = path.join(directory, file);
+			const stats = await this.lstat(pathWithDirectory);
 			if (stats.isDirectory()) {
-				const subSize = await this.dirSize(abs);
+				const subSize = await this.dirSize(pathWithDirectory);
 				size += subSize;
 			} else {
 				size += stats.size;
@@ -172,15 +110,15 @@ export class LocalFilesystem implements IFilesystem {
 		const absPath = this.getPath(path);
 		return new Promise<void>((resolve, reject) => {
 			const ts = Date.now();
-			fs.utimes(absPath, ts, ts, err => {
+			fs.utimes(absPath, ts, ts, (err) => {
 				if (err) {
 					fs.open(absPath, 'w', (err, fd) => {
 						if (err) {
-							return reject(err)
+							return reject(err);
 						}
-						fs.close(fd, err => {
+						fs.close(fd, (err) => {
 							if (err) {
-								return reject(err)
+								return reject(err);
 							} else {
 								return resolve();
 							}
@@ -189,6 +127,6 @@ export class LocalFilesystem implements IFilesystem {
 				}
 				resolve();
 			});
-		})
+		});
 	}
 }

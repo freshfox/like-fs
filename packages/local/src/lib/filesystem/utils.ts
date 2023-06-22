@@ -1,22 +1,22 @@
-import {Readable, Writable} from 'stream';
+import { Readable, Writable } from 'stream';
 import crypto from 'crypto';
-import {get as getHttps, RequestOptions} from 'https';
-import {get as getHttp, IncomingMessage} from "http";
+import { get as getHttps, RequestOptions } from 'https';
+import { get as getHttp, IncomingMessage } from 'http';
 
 export function awaitWriteFinish(stream: Writable): Promise<void> {
-	const state = stream['_writableState'];
+	const state = (stream as any)['_writableState'];
 	if (state && state.ended === true && state.finished === true) {
-		return;
+		return Promise.resolve();
 	}
 	return new Promise<void>((resolve, reject) => {
 		stream.once('finish', resolve);
 		stream.once('close', resolve);
-		stream.once('error', reject)
+		stream.once('error', reject);
 	});
 }
 
 export function randomString() {
-	return crypto.randomBytes(20).toString('hex');
+	return crypto.randomBytes(8).toString('hex');
 }
 
 export function writeToStream(data: any): Readable {
@@ -28,29 +28,26 @@ export function writeToStream(data: any): Readable {
 }
 
 class ResponseError extends Error {
-
 	constructor(readonly response: IncomingMessage) {
 		super(`Request returned status code ${response.statusCode}`);
 	}
-
 }
 
 export async function downloadFileFromUrl(url: string, writeStream: Writable, opts?: RequestOptions) {
 	const resp = await new Promise<IncomingMessage>((resolve, reject) => {
-
 		let get = getHttp;
 		if (url.startsWith('https')) {
-			get = getHttps
+			get = getHttps;
 		}
 
 		get(url, opts || {}, (resp) => {
-			if (resp.statusCode >= 400) {
+			if (!resp.statusCode || resp.statusCode >= 400) {
 				reject(new ResponseError(resp));
 			} else {
-				resolve(resp)
+				resolve(resp);
 			}
 		});
 	});
 	resp.pipe(writeStream);
-	return awaitWriteFinish(writeStream)
+	return awaitWriteFinish(writeStream);
 }

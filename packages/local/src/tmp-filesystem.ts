@@ -6,9 +6,9 @@ import { LocalFilesystem } from './local-filesystem';
 export class TmpFilesystem extends LocalFilesystem {
 	private readonly directory: string;
 
-	constructor(private config?: ITmpFilesystemConfig) {
+	constructor(private readonly config?: ITmpFilesystemConfig) {
 		super();
-		this.directory = `/${tmpdir()}/${this.config?.tmpDirectory || randomString()}`;
+		this.directory = `${tmpdir()}/${this.config?.tmpDirectory || randomString()}`;
 	}
 
 	getPath(file: string) {

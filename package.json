@@ -12,7 +12,7 @@
     "lerna": "lerna",
     "test": "lerna run --stream test",
     "build": "lerna run --stream build",
-    "release": "yarn build && yarn test && lerna publish"
+    "release": "pnpm build && pnpm test && lerna publish"
   },
   "devDependencies": {
     "firebase-tools": "^12.4.0",

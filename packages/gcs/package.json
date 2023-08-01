@@ -19,7 +19,7 @@
 		"test:mocha": "NODE_ENV=test GCLOUD_PROJECT=like-fs-local GCS_BUCKET=like-fs-local.appspot.com mocha -r ts-node/register src/**/*.test.ts",
 		"test": "firebase emulators:exec --project like-fs-local --only storage 'pnpm test:mocha'",
 		"clean": "rm -rf dist tsconfig.tsbuildinfo",
-		"build": "yarn clean && tsc --build"
+		"build": "pnpm clean && tsc --build"
 	},
 	"devDependencies": {
 		"@google-cloud/storage": "^5.18.0",

@@ -26,18 +26,18 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 	constructor(private readonly bucket: Bucket | FBucket) {}
 
 	createWriteStream(file: string, opts?: CreateWriteStreamOptions): stream.Writable {
-		return this.bucket.file(GCSFilesystem.sanitizePath(file)).createWriteStream({
+		return this.bucket.file(sanitizePath(file)).createWriteStream({
 			...opts,
 			resumable: false,
 		});
 	}
 
 	createReadStream(path: string, opts?: any): stream.Readable {
-		return this.bucket.file(GCSFilesystem.sanitizePath(path)).createReadStream(opts);
+		return this.bucket.file(sanitizePath(path)).createReadStream(opts);
 	}
 
 	async exists(path: string): Promise<boolean> {
-		return (await this.bucket.file(GCSFilesystem.sanitizePath(path)).exists())[0];
+		return (await this.bucket.file(sanitizePath(path)).exists())[0];
 	}
 
 	mkdir(path: string): Promise<void> {
@@ -54,7 +54,7 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 	}
 
 	unlink(path: string): Promise<any> {
-		return this.bucket.file(GCSFilesystem.sanitizePath(path)).delete();
+		return this.bucket.file(sanitizePath(path)).delete();
 	}
 
 	writeStreamToFile(path: string, stream: stream.Readable, options?: CreateWriteStreamOptions): Promise<any> {
@@ -79,7 +79,7 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 
 	async getUploadUrl(path: string, validUntil: Date, opts?: Partial<GetSignedUrlConfig>) {
 		opts = opts || {};
-		const resp = await this.bucket.file(GCSFilesystem.sanitizePath(path)).getSignedUrl(<GetSignedUrlConfig>{
+		const resp = await this.bucket.file(sanitizePath(path)).getSignedUrl(<GetSignedUrlConfig>{
 			version: 'v4',
 			action: 'write',
 			expires: validUntil,
@@ -90,7 +90,7 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 
 	async getDownloadUrl(path: string, validUntil: Date, options?: GetUrlOptions): Promise<string> {
 		const dateStr = validUntil.toISOString().substring(0, 10);
-		const resp = await this.bucket.file(GCSFilesystem.sanitizePath(path)).getSignedUrl({
+		const resp = await this.bucket.file(sanitizePath(path)).getSignedUrl({
 			action: 'read',
 			expires: dateStr,
 			contentType: options && options.contentType ? options.contentType : undefined,
@@ -99,7 +99,7 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 	}
 
 	async lstat(path: string): Promise<Stats> {
-		const metadata = await this.getMetadata(GCSFilesystem.sanitizePath(path));
+		const metadata = await this.getMetadata(sanitizePath(path));
 		return {
 			size: parseInt(metadata.size || '0', 10) || 0,
 			birthtime: new Date(metadata.timeCreated || 0),
@@ -108,21 +108,21 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 	}
 
 	async getMetadata(path: string): Promise<GCFileMetaData> {
-		const meta = await this.bucket.file(GCSFilesystem.sanitizePath(path)).getMetadata();
+		const meta = await this.bucket.file(sanitizePath(path)).getMetadata();
 		return meta[0];
 	}
 
 	async setMetadata(path: string, metadata: GCFileMetaData): Promise<GCFileMetaData> {
-		const res = await this.bucket.file(GCSFilesystem.sanitizePath(path)).setMetadata(metadata, {});
+		const res = await this.bucket.file(sanitizePath(path)).setMetadata(metadata, {});
 		return res[0];
 	}
 
-	makePublic(path: string) {
-		return this.bucket.file(GCSFilesystem.sanitizePath(path)).makePublic();
+	async makePublic(path: string) {
+		await this.bucket.file(sanitizePath(path)).makePublic();
 	}
 
 	getPublicUrl(path: string) {
-		return `https://${this.getBucketName()}.storage.googleapis.com/${GCSFilesystem.sanitizePath(path)}`;
+		return `https://${this.getBucketName()}.storage.googleapis.com/${sanitizePath(path)}`;
 	}
 
 	getBucketName() {
@@ -130,13 +130,17 @@ export class GCSFilesystem implements IOnlineFilesystem<GCFileMetaData> {
 	}
 
 	getApiEndpoint(): string {
-		return this.bucket.storage.apiEndpoint;
-	}
-
-	private static sanitizePath(path: string) {
-		if (path.startsWith('/')) {
-			return path.substring(1);
+		const endpoint = this.bucket.storage.apiEndpoint;
+		if (endpoint === 'https://storage.googleapis.com') {
+			return 'https://firebasestorage.googleapis.com';
 		}
-		return path;
+		return endpoint;
 	}
+}
+
+export function sanitizePath(path: string) {
+	if (path.startsWith('/')) {
+		return path.substring(1);
+	}
+	return path;
 }
